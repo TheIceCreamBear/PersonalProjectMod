@@ -26,7 +26,7 @@ public class ModBlockOre extends Block {
 		this.least = least;
 		this.most = most;
 		this.setHarvestLevel("pickaxe", 1);
-		this.setHardness(10.0f);
+		this.setHardness(6.0f);
 		this.setResistance(10.0f);
 		this.setUnlocalizedName(unlocalizedName);
 		this.setCreativeTab(CreativeTabsPPM.PPM_ITEMS_TAB);

@@ -10,6 +10,19 @@ import net.minecraft.item.Item;
 public class ItemRenderRegister {
 	public static void registerItemRender() {
 		reg(ModItems.blueStoneIngot);
+		
+		// Tools
+		reg(ModItems.blueStoneSpade);
+		reg(ModItems.blueStonePickaxe);
+		reg(ModItems.blueStoneAxe);
+		reg(ModItems.blueStoneHoe);
+		reg(ModItems.blueStoneSword);
+		
+		// Armor
+		reg(ModItems.blueStoneHelmet);
+		reg(ModItems.blueStoneChestplate);
+		reg(ModItems.blueStoneLeggings);
+		reg(ModItems.blueStoneBoots);
 	}
 	
 	public static void reg(Item item) {		

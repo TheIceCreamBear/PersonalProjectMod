@@ -7,11 +7,26 @@ itemGroup.personalprojectmod=Personal Project Mod
 item.blue_stone_ingot.name=BlueStone Ingot
 
 # Tools
+item.blue_stone_axe.name=BlueSotne Axe
+item.blue_stone_pickaxe.name=BlueStone Pickaxe
+item.blue_stone_hoe.name=BlueStone Hoe
+item.blue_stone_spade.name=BlueStone Spade
+item.blue_stone_sword.name=BlueSotne Sword
 
 # Blocks
+
+# Tile Entities
+tile.te_ore_crusher.name=Ore Crusher
 
 # Ores
 tile.blue_stone_ore.name=BlueStone Ore
 
 # GUIs
+container.ore_crusher.name=Ore Crusher
+container.personalprojectmod:ore_crusher=Ore Crusher
 
+# Armor
+item.blue_stone_helmet.name=BlueStone Helmet
+item.blue_stone_chestplate.name=BlueStone Chestplate
+item.blue_stone_leggings.name=BlueStone Leggings
+item.blue_stone_boots.name=BlueStone Boots

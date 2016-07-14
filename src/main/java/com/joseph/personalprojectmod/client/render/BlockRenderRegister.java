@@ -14,6 +14,7 @@ public class BlockRenderRegister {
 	@SideOnly(Side.CLIENT)
 	public static void registerBlockRender() {
 		reg(ModBlocks.blueStoneOre);
+		reg(ModBlocks.teOreCrusher);
 	}
 	
 	public static void reg(Block blk) {
