@@ -5,6 +5,7 @@ import com.joseph.personalprojectmod.refrence.Refrence;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,9 +16,16 @@ public class BlockRenderRegister {
 	public static void registerBlockRender() {
 		reg(ModBlocks.blueStoneOre);
 		reg(ModBlocks.teOreCrusher);
+		reg(ModBlocks.teEleFurnace);
 	}
 	
 	public static void reg(Block blk) {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(blk), 0, new ModelResourceLocation(Refrence.LOWER_CASE_MOD_ID + ":" + blk.getUnlocalizedName().substring(5), "inventory"));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void preInit() {
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.teEleFurnace), new ModelResourceLocation("personalprojectmod:te_ele_furnace", "inventory"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.teOreCrusher), new ModelResourceLocation("personalprojectmod:te_ore_crusher", "inventory"));
 	}
 }

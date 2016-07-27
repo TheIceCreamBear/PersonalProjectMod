@@ -1,8 +1,11 @@
 package com.joseph.personalprojectmod.handlers;
 
+import com.joseph.personalprojectmod.client.gui.GuiTEElectricFurnace;
 import com.joseph.personalprojectmod.client.gui.GuiTEOreCrusher;
+import com.joseph.personalprojectmod.guicontainer.ContainerTEElectricFurnace;
 import com.joseph.personalprojectmod.guicontainer.ContainerTEOreCrusher;
 import com.joseph.personalprojectmod.refrence.GuiIDRef;
+import com.joseph.personalprojectmod.tileentity.TileEntityElectricFurnace;
 import com.joseph.personalprojectmod.tileentity.TileEntityOreCrusher;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +19,8 @@ public class GuiHandler implements IGuiHandler {
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		if (id == GuiIDRef.ORE_CRUSHER_GUI) {
 			return new ContainerTEOreCrusher(player.inventory, (TileEntityOreCrusher)world.getTileEntity(new BlockPos(x, y, z)));
+		} else if (id == GuiIDRef.ELECTRIC_FURNAE_GUI) {
+			return new ContainerTEElectricFurnace(player.inventory, (TileEntityElectricFurnace)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}
@@ -24,6 +29,8 @@ public class GuiHandler implements IGuiHandler {
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		if (id == GuiIDRef.ORE_CRUSHER_GUI) {
 			return new GuiTEOreCrusher(player.inventory, (TileEntityOreCrusher)world.getTileEntity(new BlockPos(x, y, z)));
+		} else if (id == GuiIDRef.ELECTRIC_FURNAE_GUI) {
+			return new GuiTEElectricFurnace(player.inventory, (TileEntityElectricFurnace)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}

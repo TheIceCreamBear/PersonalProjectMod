@@ -2,7 +2,7 @@
     "parent": "block/orientable",
     "textures": {
         "top": "personalprojectmod:blocks/te_bottom_top",
-        "front": "personalprojectmod:blocks/te_ore_crusher",
+        "front": "personalprojectmod:blocks/te_ele_furnace",
         "side": "personalprojectmod:blocks/te_bottom_top"
     }
 }

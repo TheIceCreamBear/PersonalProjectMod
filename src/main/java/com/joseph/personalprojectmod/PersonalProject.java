@@ -45,6 +45,8 @@ public class PersonalProject {
 		ModBlocks.createBlocks();
 		ModTileEntities.createTileEntities();
 		
+		BlockRenderRegister.preInit();
+		
 		LogHelper.info("Pre Init Complete");
 	}
 	

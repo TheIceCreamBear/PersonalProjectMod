@@ -6,7 +6,7 @@ import com.joseph.personalprojectmod.PersonalProject;
 import com.joseph.personalprojectmod.creativetabs.CreativeTabsPPM;
 import com.joseph.personalprojectmod.init.ModBlocks;
 import com.joseph.personalprojectmod.refrence.GuiIDRef;
-import com.joseph.personalprojectmod.tileentity.TileEntityOreCrusher;
+import com.joseph.personalprojectmod.tileentity.TileEntityElectricFurnace;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -25,12 +25,12 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class BlockTEOreCrusher extends BlockContainer {
+public class BlockTEElectricFurnace extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
-	public BlockTEOreCrusher(String unlocalizedName) {
+	public BlockTEElectricFurnace(String unloaclizedName) {
 		super(Material.iron);
-		this.setUnlocalizedName(unlocalizedName);
+		this.setUnlocalizedName(unloaclizedName);
 		this.setHardness(2.0f);
 		this.setResistance(6.0f);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -40,7 +40,7 @@ public class BlockTEOreCrusher extends BlockContainer {
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return Item.getItemFromBlock(ModBlocks.teOreCrusher);
+		return Item.getItemFromBlock(ModBlocks.teEleFurnace);
 	}
 	
 	@Override
@@ -72,18 +72,18 @@ public class BlockTEOreCrusher extends BlockContainer {
             worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
         }
     }
-	
+
 	@Override
-	public TileEntity createNewTileEntity(World world, int mate) {
-		return new TileEntityOreCrusher();
+	public TileEntity createNewTileEntity(World worldIn, int meta) {
+		return new TileEntityElectricFurnace();
 	}
 	
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntity te = world.getTileEntity(pos);
 		
-		if (te instanceof TileEntityOreCrusher) {
-			InventoryHelper.dropInventoryItems(world, pos, (TileEntityOreCrusher)te);
+		if (te instanceof TileEntityElectricFurnace) {			
+			InventoryHelper.dropInventoryItems(world, pos, (TileEntityElectricFurnace) te);
 		}
 		super.breakBlock(world, pos, state);
 	}
@@ -95,13 +95,13 @@ public class BlockTEOreCrusher extends BlockContainer {
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 3);
+		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 3);		
 		
 		if (stack.hasDisplayName()) {
 			TileEntity te = world.getTileEntity(pos);
 			
-			if (te instanceof TileEntityOreCrusher) {
-				((TileEntityOreCrusher)world.getTileEntity(pos)).setCustomName(stack.getDisplayName());
+			if (te instanceof TileEntityElectricFurnace) {
+				((TileEntityElectricFurnace)world.getTileEntity(pos)).setCustomName(stack.getDisplayName());
 			}
 		}
 	}
@@ -113,10 +113,10 @@ public class BlockTEOreCrusher extends BlockContainer {
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-	    if (!world.isRemote) {
-	        player.openGui(PersonalProject.instance, GuiIDRef.ORE_CRUSHER_GUI, world, pos.getX(), pos.getY(), pos.getZ());
-	    }
-	    return true;
+		if (!world.isRemote) {
+			player.openGui(PersonalProject.instance, GuiIDRef.ELECTRIC_FURNAE_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+		}
+		return true;
 	}
 	
 	@Override
@@ -137,11 +137,11 @@ public class BlockTEOreCrusher extends BlockContainer {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing facing = EnumFacing.getFront(meta);
-		
-		if (facing.getAxis() == EnumFacing.Axis.Y) {
-			facing = EnumFacing.NORTH;
-		}
-		
-		return this.getDefaultState().withProperty(FACING, facing);
+
+        if (facing.getAxis() == EnumFacing.Axis.Y) {
+            facing = EnumFacing.NORTH;
+        }
+
+        return this.getDefaultState().withProperty(FACING, facing);
 	}
 }

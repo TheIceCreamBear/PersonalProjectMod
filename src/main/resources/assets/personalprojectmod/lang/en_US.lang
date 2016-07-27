@@ -10,13 +10,14 @@ item.blue_stone_ingot.name=BlueStone Ingot
 item.blue_stone_axe.name=BlueSotne Axe
 item.blue_stone_pickaxe.name=BlueStone Pickaxe
 item.blue_stone_hoe.name=BlueStone Hoe
-item.blue_stone_spade.name=BlueStone Spade
+item.blue_stone_spade.name=BlueStone Shovel
 item.blue_stone_sword.name=BlueSotne Sword
 
 # Blocks
 
 # Tile Entities
 tile.te_ore_crusher.name=Ore Crusher
+tile.te_ele_furnace.name=Electric Furnace
 
 # Ores
 tile.blue_stone_ore.name=BlueStone Ore
@@ -24,6 +25,7 @@ tile.blue_stone_ore.name=BlueStone Ore
 # GUIs
 container.ore_crusher.name=Ore Crusher
 container.personalprojectmod:ore_crusher=Ore Crusher
+container.personalprojectmod:ele_furnace=Electric Furnace
 
 # Armor
 item.blue_stone_helmet.name=BlueStone Helmet

@@ -11,48 +11,47 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 
-public class TileEntityOreCrusher extends TileEntity implements ITickable, IInventory /*IEnergySink TODO*/ {
-
+public class TileEntityElectricFurnace extends TileEntity implements ITickable, IInventory {
 	private ItemStack[] inventory;
 	private String customName;
 	
-	public TileEntityOreCrusher() {
+	public TileEntityElectricFurnace() {
 		this.inventory = new ItemStack[this.getSizeInventory()];
 	}
 	
 	public String getCustomName() {
-        return this.customName;
-    }
-
-    public void setCustomName(String customName) {
-        this.customName = customName;
-    }
-    
-    @Override
-    public void update() {
-    	
-    }
-    
+		return this.customName;
+	}
+	
+	public void setCustomName(String customName) {
+		this.customName = customName;
+	}
+	
+	@Override
+	public void update() {
+		
+	}
+	
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.customName : "container.personalprojectmod:ore_crusher";
+		return this.hasCustomName() ? this.customName : "container.personalprojectmod:ele_furnace";
 	}
 	
 	@Override
 	public boolean hasCustomName() {
 		return this.customName != null && !this.customName.equals("");
 	}
-
+	
 	@Override
 	public IChatComponent getDisplayName() {
 		return this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName());
 	}
-
+	
 	@Override
 	public int getSizeInventory() {
-		return 3; // TODO
+		return 4;
 	}
-
+	
 	@Override
 	public ItemStack getStackInSlot(int index) {
 		if (index < 0 || index >= this.getSizeInventory())
@@ -94,7 +93,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 	    this.setInventorySlotContents(index, null);
 	    return stack;
 	}
-
+	
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		if (index < 0 || index >= this.getSizeInventory())
@@ -139,7 +138,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 	public int getField(int id) {
 		return 0;
 	}
-
+	
 	@Override
 	public void setField(int id, int value) {
 		
