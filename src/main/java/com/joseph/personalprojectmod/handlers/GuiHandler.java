@@ -1,12 +1,18 @@
 package com.joseph.personalprojectmod.handlers;
 
 import com.joseph.personalprojectmod.client.gui.GuiTEElectricFurnace;
+import com.joseph.personalprojectmod.client.gui.GuiTEElectricGenerator;
 import com.joseph.personalprojectmod.client.gui.GuiTEOreCrusher;
+import com.joseph.personalprojectmod.client.gui.GuiTEPowerBox;
 import com.joseph.personalprojectmod.guicontainer.ContainerTEElectricFurnace;
+import com.joseph.personalprojectmod.guicontainer.ContainerTEElectricGenerator;
 import com.joseph.personalprojectmod.guicontainer.ContainerTEOreCrusher;
+import com.joseph.personalprojectmod.guicontainer.ContainerTEPowerBox;
 import com.joseph.personalprojectmod.refrence.GuiIDRef;
 import com.joseph.personalprojectmod.tileentity.TileEntityElectricFurnace;
+import com.joseph.personalprojectmod.tileentity.TileEntityElectricGenerator;
 import com.joseph.personalprojectmod.tileentity.TileEntityOreCrusher;
+import com.joseph.personalprojectmod.tileentity.TileEntityPowerBox;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -21,6 +27,10 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerTEOreCrusher(player.inventory, (TileEntityOreCrusher)world.getTileEntity(new BlockPos(x, y, z)));
 		} else if (id == GuiIDRef.ELECTRIC_FURNAE_GUI) {
 			return new ContainerTEElectricFurnace(player.inventory, (TileEntityElectricFurnace)world.getTileEntity(new BlockPos(x, y, z)));
+		} else if (id == GuiIDRef.ELECTRIC_GENERATOR_GUI) {
+			return new ContainerTEElectricGenerator(player.inventory, (TileEntityElectricGenerator)world.getTileEntity(new BlockPos(x, y, z)));
+		} else if (id == GuiIDRef.POWER_BOX_GUI) {
+			return new ContainerTEPowerBox(player.inventory, (TileEntityPowerBox)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}
@@ -31,6 +41,10 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiTEOreCrusher(player.inventory, (TileEntityOreCrusher)world.getTileEntity(new BlockPos(x, y, z)));
 		} else if (id == GuiIDRef.ELECTRIC_FURNAE_GUI) {
 			return new GuiTEElectricFurnace(player.inventory, (TileEntityElectricFurnace)world.getTileEntity(new BlockPos(x, y, z)));
+		} else if (id == GuiIDRef.ELECTRIC_GENERATOR_GUI) {
+			return new GuiTEElectricGenerator(player.inventory, (TileEntityElectricGenerator)world.getTileEntity(new BlockPos(x, y, z)));
+		} else if (id == GuiIDRef.POWER_BOX_GUI) {
+			return new GuiTEPowerBox(player.inventory, (TileEntityPowerBox)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}

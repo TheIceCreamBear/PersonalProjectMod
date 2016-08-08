@@ -36,6 +36,7 @@ public class BlockTEElectricFurnace extends BlockContainer {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		this.setCreativeTab(CreativeTabsPPM.PPM_ITEMS_TAB);
 		this.setHarvestLevel("pickaxe", 1);
+		this.setLightLevel(10.0f);
 	}
 	
 	@Override

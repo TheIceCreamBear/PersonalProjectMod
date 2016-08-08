@@ -17,6 +17,8 @@ public class BlockRenderRegister {
 		reg(ModBlocks.blueStoneOre);
 		reg(ModBlocks.teOreCrusher);
 		reg(ModBlocks.teEleFurnace);
+		reg(ModBlocks.teEleGenerator);
+		reg(ModBlocks.tePowerBox);
 	}
 	
 	public static void reg(Block blk) {
@@ -27,5 +29,7 @@ public class BlockRenderRegister {
 	public static void preInit() {
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.teEleFurnace), new ModelResourceLocation("personalprojectmod:te_ele_furnace", "inventory"));
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.teOreCrusher), new ModelResourceLocation("personalprojectmod:te_ore_crusher", "inventory"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.teEleGenerator), new ModelResourceLocation("personalprojectmod:te_ele_generator", "inventory"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.tePowerBox), new ModelResourceLocation("personalprojectmod:te_power_box", "inventory"));
 	}
 }

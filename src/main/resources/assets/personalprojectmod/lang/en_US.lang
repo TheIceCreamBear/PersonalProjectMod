@@ -18,6 +18,8 @@ item.blue_stone_sword.name=BlueSotne Sword
 # Tile Entities
 tile.te_ore_crusher.name=Ore Crusher
 tile.te_ele_furnace.name=Electric Furnace
+tile.te_ele_generator.name=Electric Generator
+tile.te_power_box.name=Power Storage Box
 
 # Ores
 tile.blue_stone_ore.name=BlueStone Ore
@@ -26,6 +28,8 @@ tile.blue_stone_ore.name=BlueStone Ore
 container.ore_crusher.name=Ore Crusher
 container.personalprojectmod:ore_crusher=Ore Crusher
 container.personalprojectmod:ele_furnace=Electric Furnace
+container.personalprojectmod:ele_generator=Electric Generator
+container.personalprojectmod:power_box=Power Storage Box
 
 # Armor
 item.blue_stone_helmet.name=BlueStone Helmet

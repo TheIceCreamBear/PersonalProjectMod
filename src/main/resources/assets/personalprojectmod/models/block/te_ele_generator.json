@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "personalprojectmod:blocks/te_bottom_top",
+        "front": "personalprojectmod:blocks/te_ele_generator",
+        "side": "personalprojectmod:blocks/te_bottom_top"
+    }
+}
