@@ -34,12 +34,14 @@ public final class ModItems {
 	
 	// Generic Items
 	public static Item blueStoneIngot = new BasicItem("blue_stone_ingot");
+	public static Item blueStoneDust = new BasicItem("blue_stone_dust");
 	
 	
 	// SELF NOTE: WHEN EVER A NEW ITEM IS ADDED, IT NEEDS TO BE REISTERED IN ItemRenderRegister
 	public static void createItems() {
 		// Generic Items
 		GameRegistry.registerItem(blueStoneIngot, "blue_stone_ingot");
+		GameRegistry.registerItem(blueStoneDust, "blue_stone_dust");
 		
 		// Tools
 		GameRegistry.registerItem(blueStoneSpade, "blue_stone_spade");

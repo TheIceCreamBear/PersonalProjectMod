@@ -27,6 +27,12 @@ public class GuiTEElectricFurnace extends GuiContainer {
     	GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
     	this.mc.getTextureManager().bindTexture(new ResourceLocation("personalprojectmod:textures/gui/ele_furnace.png"));
     	this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+    	
+    	// Top of Arrow
+    	this.drawTexturedModalRect(80 + this.guiLeft, 30 + this.guiTop, 176, 0, this.getTopProgress(), 9);
+    	
+    	// Bottom Arrow
+    	this.drawTexturedModalRect(80 + this.guiLeft, 30 + this.guiTop + 9, 176, 9, this.getBottomProgress(), 10);
     }
     
     @Override
@@ -34,5 +40,17 @@ public class GuiTEElectricFurnace extends GuiContainer {
     	String s = this.te.getDisplayName().getFormattedText();
 		this.fontRendererObj.drawString(s, 88 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
 		this.fontRendererObj.drawString(this.playerInv.getDisplayName().getUnformattedText(), 8, 72, 4210752);
+    }
+    
+    private int getTopProgress() {
+    	int time = te.getField(0);
+    	int total = te.getField(1);
+    	return time != 0 && total != 0 ? time * 24 / total : 0;
+    }
+    
+    private int getBottomProgress() {
+    	int time = te.getField(2);
+    	int total = te.getField(3);
+    	return time != 0 && total != 0 ? time * 24 / total : 0;
     }
 }

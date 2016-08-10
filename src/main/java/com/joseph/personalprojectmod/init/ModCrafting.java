@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModCrafting {
 	public static void initCrafting() {
 		GameRegistry.addSmelting(ModBlocks.blueStoneOre, new ItemStack(ModItems.blueStoneIngot), 1.5f);
+		GameRegistry.addSmelting(ModItems.blueStoneDust, new ItemStack(ModItems.blueStoneIngot), 1.5f);		
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueStoneAxe), new Object[] { "## ", "#I ", " I ", '#', ModItems.blueStoneIngot, 'I', Items.stick});
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueStoneAxe), new Object[] { " ##", " I#", " I ", '#', ModItems.blueStoneIngot, 'I', Items.stick});
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueStoneHoe), new Object[] { "## ", " I ", " I ", '#', ModItems.blueStoneIngot, 'I', Items.stick});

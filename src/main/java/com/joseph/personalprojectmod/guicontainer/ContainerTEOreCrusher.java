@@ -1,21 +1,27 @@
 package com.joseph.personalprojectmod.guicontainer;
 
+import com.joseph.personalprojectmod.recipie.OreCrusherRecipes;
 import com.joseph.personalprojectmod.tileentity.TileEntityOreCrusher;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerTEOreCrusher extends Container {
 	private TileEntityOreCrusher te;
+	private int field0;
+	private int field1;
 	
 	public ContainerTEOreCrusher(IInventory playerInv, TileEntityOreCrusher te) {
 		this.te = te;
 		
 		// inputSlot TODO - make slot extension \/ \/
-		this.addSlotToContainer(new Slot(te, 0, 53, 18));
+		this.addSlotToContainer(new Slot(te, 0, 53, 31));
 		
 		// Output slot one
 		this.addSlotToContainer(new Slot(te, 1, 116, 31));
@@ -37,6 +43,36 @@ public class ContainerTEOreCrusher extends Container {
 	}
 	
 	@Override
+	public void onCraftGuiOpened(ICrafting listener) {
+        super.onCraftGuiOpened(listener);
+        listener.sendAllWindowProperties(this, this.te);
+    }
+	
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		
+		for (int i = 0; i < this.crafters.size(); i++) {
+			ICrafting icrafting = (ICrafting)this.crafters.get(i);
+			
+			if (this.field0 != this.te.getField(0)) {
+				icrafting.sendProgressBarUpdate(this, 0, this.te.getField(0));
+			}
+			if (this.field1 != this.te.getField(1)) {
+				icrafting.sendProgressBarUpdate(this, 1, this.te.getField(1));
+			}
+		}
+		
+		this.field0 = this.te.getField(0);
+		this.field1 = this.te.getField(1);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void updateProgressBar(int id, int data) {
+		this.te.setField(id, data);
+	}
+	
+	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return this.te.isUseableByPlayer(player);
 	}
@@ -50,7 +86,19 @@ public class ContainerTEOreCrusher extends Container {
 	        ItemStack current = slot.getStack();
 	        previous = current.copy();
 
-	        // [...] Custom behavior
+	        if (fromSlot == 1 || fromSlot == 2) {
+	        	if (!this.mergeItemStack(current, 3, 39, true))
+	        		return null;
+	        	slot.onSlotChange(current, previous);
+	        } else if (fromSlot != 0) {
+	        	if (OreCrusherRecipes.instance().getReslut(current) != null) {
+	        		if (!this.mergeItemStack(current, 0, 1, false)) {
+	        			return null;
+	        		}
+	        	}
+	        } else if (!this.mergeItemStack(current, 3, 39, false)) {
+	        	return null;
+	        }
 
 	        if (current.stackSize == 0)
 	            slot.putStack((ItemStack) null);

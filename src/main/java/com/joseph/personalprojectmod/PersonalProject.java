@@ -9,8 +9,10 @@ import com.joseph.personalprojectmod.init.ModCrafting;
 import com.joseph.personalprojectmod.init.ModItems;
 import com.joseph.personalprojectmod.init.ModTileEntities;
 import com.joseph.personalprojectmod.proxy.IProxy;
+import com.joseph.personalprojectmod.recipie.OreCrusherRecipes;
 import com.joseph.personalprojectmod.refrence.Refrence;
 import com.joseph.personalprojectmod.util.LogHelper;
+import com.joseph.personalprojectmod.util.OreDictLocalReg;
 import com.joseph.personalprojectmod.world.BasicWorldGen;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -57,7 +59,10 @@ public class PersonalProject {
 		ItemRenderRegister.registerItemRender();
 		BlockRenderRegister.registerBlockRender();
 		
+		OreDictLocalReg.registerAllOreDict();
+		
 		ModCrafting.initCrafting();
+		OreCrusherRecipes.instance();
 		
 		GameRegistry.registerWorldGenerator(new BasicWorldGen(), 0);
 		

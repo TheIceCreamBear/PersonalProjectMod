@@ -3,6 +3,9 @@ itemGroup.personalprojectmod=Personal Project Mod
 
 # Items
 
+# Dusts
+item.blue_stone_dust.name= BlueStone Dust
+
 # Ingots
 item.blue_stone_ingot.name=BlueStone Ingot
 
