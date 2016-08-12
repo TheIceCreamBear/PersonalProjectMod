@@ -3,6 +3,10 @@ package com.joseph.personalprojectmod.tileentity;
 import com.joseph.personalprojectmod.recipie.OreCrusherRecipes;
 import com.joseph.personalprojectmod.util.LogHelper;
 
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyEmitter;
+import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,21 +15,31 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.MinecraftForge;
 
-public class TileEntityOreCrusher extends TileEntity implements ITickable, IInventory /*IEnergySink TODO*/ {
+public class TileEntityOreCrusher extends TileEntity implements ITickable, IInventory, IEnergySink {
 
 	private ItemStack[] inventory;
 	private String customName;
 	
-	private int powerStored;
-	
 	private int crushTime;
 	private int totalCrushTime;
 	
+	// Power stuff
+	private boolean addedToENet = false;
+	
+	private double energyStored;
+	private double capacity;
+	private int tier = Integer.MAX_VALUE;
+	
+	// End Power Stuff
+	
 	public TileEntityOreCrusher() {
 		this.inventory = new ItemStack[this.getSizeInventory()];
+		this.capacity = 10000;
 	}
 	
 	public String getCustomName() {
@@ -40,15 +54,27 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
     public void update() {
     	boolean isDirty = false;
     	
+    	// Client Side
+    	if (this.worldObj.isRemote) {
+
+    	}
+    		
+    	// Server Side
     	if (!this.worldObj.isRemote) {
+//    		LogHelper.info(this.energyStored + "/" + this.capacity);
+    		
+    		if (!this.addedToENet) {MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this)); this.addedToENet = true;}
+    		
     		if (this.canCrush()) {
-    			this.crushTime++;
-    			
-    			if (this.crushTime == this.totalCrushTime) {
-    				this.crushTime = 0;
-    				this.totalCrushTime = this.getCrushTime(this.inventory[0]);
-    				this.crushItem();
-    				isDirty = true;
+    			if (this.useEnergy(4)) {    				
+    				this.crushTime++;
+    				
+    				if (this.crushTime == this.totalCrushTime) {
+    					this.crushTime = 0;
+    					this.totalCrushTime = this.getCrushTime(this.inventory[0]);
+    					this.crushItem();
+    					isDirty = true;
+    				}
     			}
     		} else {
     			this.crushTime = 0;
@@ -175,6 +201,8 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		switch (id) {
 			case 0: return this.crushTime;
 			case 1: return this.totalCrushTime;
+			case 2: return (int) this.energyStored;
+			case 3: return (int) this.capacity;
 			default: return 0;
 		}
 	}
@@ -182,14 +210,16 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 	@Override
 	public void setField(int id, int value) {
 		switch (id) {
-			case 0: this.crushTime = value;
-			case 1: this.totalCrushTime = value;
+			case 0: this.crushTime = value; break;
+			case 1: this.totalCrushTime = value; break;
+			case 2: this.energyStored = value; break;
+			case 3: this.capacity = value; break;
 		}
 	}
 
 	@Override
 	public int getFieldCount() {
-		return 2;
+		return 4;
 	}
 
 	@Override
@@ -205,6 +235,11 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		
 		nbt.setInteger("CrushTIime", this.crushTime);
 		nbt.setInteger("TotalCrushTime", this.totalCrushTime);
+		
+		// Energy
+		nbt.setDouble("EnergyStored", this.energyStored);
+		nbt.setDouble("Capacity", this.capacity);
+		// End Energy
 		
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < this.getSizeInventory(); i++) {
@@ -231,6 +266,11 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		this.crushTime = nbt.getInteger("CrushTime");
 		this.totalCrushTime = nbt.getInteger("TotalCrushTime");
 		
+		// Energy
+		this.energyStored = nbt.getDouble("EnergyStored");
+		this.capacity = nbt.getDouble("Capacity");
+		// End Energy
+		
 		NBTTagList list = nbt.getTagList("Items", 10);
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound stackTag = list.getCompoundTagAt(i);
@@ -245,8 +285,10 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		// TODO Add Other Things to this
 	}
 	
+	// CRAFTING START
+	
 	public int getCrushTime(ItemStack stack) {
-		return 100;
+		return 150;
 	}
 	
 	private boolean canCrush() {
@@ -287,5 +329,60 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 				this.inventory[0] = null;
 			}
 		}
+	}
+	
+	// CRAFTING END
+	
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		
+		this.onChunkUnload();
+	}
+	
+	@Override
+	public void onChunkUnload() {
+		if (this.addedToENet) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+			
+			this.addedToENet = false;
+		}
+	}
+	
+	// Energy related things
+	
+	@Override
+	public int getSinkTier() {
+		return Integer.MAX_VALUE; // Allows any tier of power
+	}
+	
+	@Override
+	public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing direction) {
+		return true;
+	}
+	
+	@Override
+	public double getDemandedEnergy() {
+		return Math.max(0, this.capacity - this.energyStored);
+	}
+	
+	@Override
+	public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
+		energyStored += amount;
+
+		return 0;
+	}
+	
+	private boolean canUseEnergy(double amount) {
+		return this.energyStored >= amount;
+	}
+	
+	private boolean useEnergy(double amount) {
+		if (this.canUseEnergy(amount)) {
+			this.energyStored -= amount;
+			
+			return true;
+		}
+		return false;
 	}
 }

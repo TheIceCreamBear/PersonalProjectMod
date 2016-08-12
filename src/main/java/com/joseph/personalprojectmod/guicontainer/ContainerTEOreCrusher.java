@@ -16,6 +16,8 @@ public class ContainerTEOreCrusher extends Container {
 	private TileEntityOreCrusher te;
 	private int field0;
 	private int field1;
+	private int field2;
+	private int field3;
 	
 	public ContainerTEOreCrusher(IInventory playerInv, TileEntityOreCrusher te) {
 		this.te = te;
@@ -61,10 +63,18 @@ public class ContainerTEOreCrusher extends Container {
 			if (this.field1 != this.te.getField(1)) {
 				icrafting.sendProgressBarUpdate(this, 1, this.te.getField(1));
 			}
+			if (this.field2 != this.te.getField(2)) {
+				icrafting.sendProgressBarUpdate(this, 2, this.te.getField(2));
+			}
+			if (this.field3 != this.te.getField(3)) {
+				icrafting.sendProgressBarUpdate(this, 3, this.te.getField(3));
+			}
 		}
 		
 		this.field0 = this.te.getField(0);
 		this.field1 = this.te.getField(1);
+		this.field2 = this.te.getField(2);
+		this.field3 = this.te.getField(3);
 	}
 	
 	@SideOnly(Side.CLIENT)

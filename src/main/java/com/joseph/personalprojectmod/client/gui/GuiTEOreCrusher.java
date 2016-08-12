@@ -31,6 +31,14 @@ public class GuiTEOreCrusher extends GuiContainer {
     	
     	// Arrow
     	this.drawTexturedModalRect(this.guiLeft + 80, this.guiTop + 30, 176, 0, this.getProgress(), 17);
+    	
+    	// Power Meter
+    	this.drawTexturedModalRect(this.guiLeft + 17, this.guiTop + 15 + 47 - this.getScalledPower(), 214, 47 - this.getScalledPower(), 8, this.getScalledPower() + 1);
+    	this.drawTexturedModalRect(this.guiLeft + 14, this.guiTop + 12, 200, 0, 14, 54);
+    	
+//    	LogHelper.info(this.getScalledPower());
+//    	this.fontRendererObj.drawString(this.te.getField(2) + " / " + this.te.getField(3), this.guiLeft + 80, this.guiTop + 60, 4210752);
+    	
     }
     
     @Override
@@ -42,6 +50,12 @@ public class GuiTEOreCrusher extends GuiContainer {
     
     private int getProgress() {
     	int time = te.getField(0);
-    	return time != 0 ? time * 24 / 100 : 0;
+    	return time != 0 ? time * 24 / 150 : 0;
+    }
+    
+    private int getScalledPower() {
+    	int stored = this.te.getField(2);
+    	int max = this.te.getField(3);
+    	return stored != 0 && max != 0 ? stored * 48 / max : 0;
     }
 }

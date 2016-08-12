@@ -18,6 +18,8 @@ public class ContainerTEElectricFurnace extends Container {
 	private int field1;
 	private int field2;
 	private int field3;
+	private int field4;
+	private int field5;
 	
 	public ContainerTEElectricFurnace(IInventory playerInv, TileEntityElectricFurnace te) {
 		this.te = te;
@@ -75,12 +77,22 @@ public class ContainerTEElectricFurnace extends Container {
 			if (this.field3 != this.te.getField(3)) {
 				icrafting.sendProgressBarUpdate(this, 3, this.te.getField(3));
 			}
+			
+			if (this.field4 != this.te.getField(4)) {
+				icrafting.sendProgressBarUpdate(this, 4, this.te.getField(4));
+			}
+			
+			if (this.field5 != this.te.getField(5)) {
+				icrafting.sendProgressBarUpdate(this, 5, this.te.getField(5));
+			}
 		}
 		
 		this.field0 = this.te.getField(0);
 		this.field1 = this.te.getField(1);
 		this.field2 = this.te.getField(2);
 		this.field3 = this.te.getField(3);
+		this.field4 = this.te.getField(4);
+		this.field5 = this.te.getField(5);
 	}
 	
 	@SideOnly(Side.CLIENT)

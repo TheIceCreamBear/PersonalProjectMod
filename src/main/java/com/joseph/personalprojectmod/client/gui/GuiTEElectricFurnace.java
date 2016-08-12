@@ -33,7 +33,11 @@ public class GuiTEElectricFurnace extends GuiContainer {
     	
     	// Bottom Arrow
     	this.drawTexturedModalRect(80 + this.guiLeft, 30 + this.guiTop + 9, 176, 9, this.getBottomProgress(), 10);
-    }
+    	
+    	// Power Meter
+    	this.drawTexturedModalRect(this.guiLeft + 67, this.guiTop + 61, 0, 180, this.getScalledPower(), 8);
+    	this.drawTexturedModalRect(this.guiLeft + 64, this.guiTop + 58, 0, 166, 54, 14);
+	}
     
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
@@ -52,5 +56,11 @@ public class GuiTEElectricFurnace extends GuiContainer {
     	int time = te.getField(2);
     	int total = te.getField(3);
     	return time != 0 && total != 0 ? time * 24 / total : 0;
+    }
+    
+    private int getScalledPower() {
+    	int stored = this.te.getField(4);
+    	int max = this.te.getField(5);
+    	return stored != 0 && max != 0 ? stored * 48 / max : 0;
     }
 }

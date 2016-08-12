@@ -11,7 +11,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 
-public class TileEntityElectricGenerator extends TileEntity implements ITickable, IInventory {
+public class TileEntityElectricGenerator extends TileEntity implements ITickable, IInventory/*, IEnergySource */ {
 	private ItemStack[] inventory;
 	private String customName;
 	

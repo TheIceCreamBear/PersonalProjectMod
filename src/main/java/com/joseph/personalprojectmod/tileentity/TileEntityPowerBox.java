@@ -11,7 +11,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 
-public class TileEntityPowerBox extends TileEntity  implements ITickable, IInventory {
+public class TileEntityPowerBox extends TileEntity  implements ITickable, IInventory/*, IEnergySink, IEnergySource */ {
 	private ItemStack[] inventory;
 	private String customName;
 	
