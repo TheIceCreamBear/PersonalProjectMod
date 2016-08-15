@@ -53,8 +53,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	public void update() {
 		boolean isDirty = false;
 		
-		// TODO - make cooktime 100 and use 4 EU/t
-		
 		// Client Side
 		if (this.worldObj.isRemote) {
 			

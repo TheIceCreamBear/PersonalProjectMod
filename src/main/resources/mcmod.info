@@ -10,11 +10,12 @@
   "authorList": [
     "Joseph Terribile"
   ],
-  "credits": "Joseph Terribile for all contributions to the mod",
+  "credits": " To Joseph Terribile for all contributions to the source code and visual items. To the IndustrialCraft2 team of developers for an awesome mod and EnergyNet API",
   "logoFile": "",
   "screenshots": [
   ],
   "dependencies": [
+    
   ]
 }
 ]

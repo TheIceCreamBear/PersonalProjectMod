@@ -45,7 +45,6 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		this.capacity = 1000000;
 	}
 	
-	
 	public String getCustomName() {
 		return this.customName;
 	}
@@ -65,7 +64,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		
 		// Server
 		if (!this.worldObj.isRemote) {
-			LogHelper.info(this.energyStored + "/" + this.capacity);
+//			LogHelper.info(this.energyStored + "/" + this.capacity);
 			if (!this.addedToENet) {
 				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 				
