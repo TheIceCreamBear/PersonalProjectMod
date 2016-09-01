@@ -29,9 +29,11 @@ public class BasicWorldGen implements IWorldGenerator {
 		int x = chunkX << 4;
 		int z = chunkZ << 4;
 		
+		int diff = maxHeight - minHeight;
+		
 		for(int i = 0; i < chancesToSpawn; i++) {
 			int randPosX = x + rand.nextInt(16);
-			int randPosY = rand.nextInt(76) + 32;
+			int randPosY = rand.nextInt(diff) + minHeight;
 			int randPosZ = z + rand.nextInt(16);
 			generator.generate(world, rand, new BlockPos(randPosX, randPosY, randPosZ));
 		}

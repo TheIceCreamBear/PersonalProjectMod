@@ -45,7 +45,7 @@ minecraft {
 }
 
 dependencies {
-    compile files('industrialcraft-2-2.3.262-ex18-dev.jar')
+    
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
