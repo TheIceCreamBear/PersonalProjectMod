@@ -24,6 +24,7 @@ public class ModCrafting {
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueStoneBoots), new Object[] {"   ", "# #", "# #", '#', ModItems.blueStoneIngot});
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.teOreCrusher)), new Object[] {"###", "#I#", "#$#", '#', Items.iron_ingot, 'I', Items.redstone, '$', ModItems.blueStoneIngot});
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.teEleFurnace)), new Object[] {"###", "#F#", "#R#", '#', Items.iron_ingot, 'F', Item.getItemFromBlock(Blocks.furnace), 'R', Item.getItemFromBlock(Blocks.redstone_block)});
+		GameRegistry.addRecipe(new ItemStack(ModItems.blueApple), new Object[] {"###", "#I#", "###", '#', ModItems.blueStoneIngot, 'I', Items.apple});
 		
 	}
 }

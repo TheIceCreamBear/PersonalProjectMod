@@ -3,6 +3,7 @@ package com.joseph.personalprojectmod.init;
 import com.joseph.personalprojectmod.items.BasicItem;
 import com.joseph.personalprojectmod.items.ModArmor;
 import com.joseph.personalprojectmod.items.ModAxe;
+import com.joseph.personalprojectmod.items.ModFood;
 import com.joseph.personalprojectmod.items.ModHoe;
 import com.joseph.personalprojectmod.items.ModPickaxe;
 import com.joseph.personalprojectmod.items.ModSpade;
@@ -11,6 +12,8 @@ import com.joseph.personalprojectmod.items.ModSword;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -35,6 +38,7 @@ public final class ModItems {
 	// Generic Items
 	public static Item blueStoneIngot = new BasicItem("blue_stone_ingot");
 	public static Item blueStoneDust = new BasicItem("blue_stone_dust");
+	public static Item blueApple = new ModFood("blu_apple", 6, 1.5f, false, new PotionEffect(Potion.regeneration.id, 100, 0));
 	
 	
 	// SELF NOTE: WHEN EVER A NEW ITEM IS ADDED, IT NEEDS TO BE REISTERED IN ItemRenderRegister
@@ -42,6 +46,7 @@ public final class ModItems {
 		// Generic Items
 		GameRegistry.registerItem(blueStoneIngot, "blue_stone_ingot");
 		GameRegistry.registerItem(blueStoneDust, "blue_stone_dust");
+		GameRegistry.registerItem(blueApple, "blu_apple");
 		
 		// Tools
 		GameRegistry.registerItem(blueStoneSpade, "blue_stone_spade");

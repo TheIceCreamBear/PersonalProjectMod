@@ -11,6 +11,7 @@ public class ItemRenderRegister {
 	public static void registerItemRender() {
 		reg(ModItems.blueStoneIngot);
 		reg(ModItems.blueStoneDust);
+		reg(ModItems.blueApple);
 		
 		// Tools
 		reg(ModItems.blueStoneSpade);
