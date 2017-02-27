@@ -2,13 +2,15 @@ package com.joseph.personalprojectmod.blocks;
 
 import java.util.Random;
 
+import com.joseph.personalprojectmod.refrence.EnumBlocks;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 
 public class BlueStoneOre extends ModBlockOre {
-	public BlueStoneOre(String unlocalizedName) {
-		super(unlocalizedName, Material.rock, null, 0, 1, 1);
+	public BlueStoneOre() {
+		super(EnumBlocks.BLUE_STONE_ORE.getUnlocalizedName(), EnumBlocks.BLUE_STONE_ORE.getRegistryName(), Material.ROCK, null, 0, 1, 1);
 		super.drop = Item.getItemFromBlock(this);
 	}
 	

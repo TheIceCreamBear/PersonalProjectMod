@@ -4,7 +4,7 @@ import com.joseph.personalprojectmod.tileentity.TileEntityElectricGenerator;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -37,18 +37,18 @@ public class ContainerTEElectricGenerator extends Container {
 		}
 	}
 	
-	@Override
-	public void onCraftGuiOpened(ICrafting listener) {
-        super.onCraftGuiOpened(listener);
-        listener.sendAllWindowProperties(this, this.te);
-    }
+//	@Override
+//	public void onCraftGuiOpened(ICrafting listener) {
+//        super.onCraftGuiOpened(listener);
+//        listener.sendAllWindowProperties(this, this.te);
+//    }
 	
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		
-		for (int i = 0; i < this.crafters.size(); i++) {
-			ICrafting icrafting = (ICrafting)this.crafters.get(i);
+		for (int i = 0; i < this.listeners.size(); i++) {
+			IContainerListener icrafting = (IContainerListener)this.listeners.get(i);
 			
 			if (this.field0 != this.te.getField(0)) {
 				icrafting.sendProgressBarUpdate(this, 0, this.te.getField(0));
@@ -80,7 +80,7 @@ public class ContainerTEElectricGenerator extends Container {
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return this.te.isUseableByPlayer(player);
+		return this.te.isUsableByPlayer(player);
 	}
 	
 	@Override
@@ -104,14 +104,14 @@ public class ContainerTEElectricGenerator extends Container {
 	        	}
 	        }
 
-	        if (current.stackSize == 0)
+	        if (current.getCount() == 0)
 	            slot.putStack((ItemStack) null);
 	        else
 	            slot.onSlotChanged();
 
-	        if (current.stackSize == previous.stackSize)
+	        if (current.getCount() == previous.getCount())
 	            return null;
-	        slot.onPickupFromSlot(playerIn, current);
+	        slot.onTake(playerIn, current);
 	    }
 	    return previous;
 	}

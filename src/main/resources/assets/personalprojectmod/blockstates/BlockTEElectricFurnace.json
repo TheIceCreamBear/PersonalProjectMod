@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "personalprojectmod:teEleFurnace" },
+        "facing=south": { "model": "personalprojectmod:teEleFurnace", "y": 180 },
+        "facing=west": { "model": "personalprojectmod:teEleFurnace", "y": 270 },
+        "facing=east": { "model": "personalprojectmod:teEleFurnace", "y": 90 }
+    }
+}

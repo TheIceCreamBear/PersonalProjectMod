@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "personalprojectmod:teEleGenerator" },
+        "facing=south": { "model": "personalprojectmod:teEleGenerator", "y": 180 },
+        "facing=west": { "model": "personalprojectmod:teEleGenerator", "y": 270 },
+        "facing=east": { "model": "personalprojectmod:teEleGenerator", "y": 90 }
+    }
+}

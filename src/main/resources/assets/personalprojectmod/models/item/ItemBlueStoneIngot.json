@@ -1,0 +1,6 @@
+{
+    "parent": "personalprojectmod:item/standard_item",
+    "textures": {
+        "layer0": "personalprojectmod:items/blue_stone_ingot"
+    }
+}

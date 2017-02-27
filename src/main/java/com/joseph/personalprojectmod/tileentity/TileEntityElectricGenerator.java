@@ -1,13 +1,12 @@
 package com.joseph.personalprojectmod.tileentity;
 
 import com.joseph.personalprojectmod.blocks.BlockTEElectricGenerator;
-import com.joseph.personalprojectmod.util.LogHelper;
 
-import ic2.api.energy.EnergyNet;
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergyAcceptor;
-import ic2.api.energy.tile.IEnergySource;
+//import ic2.api.energy.EnergyNet;
+//import ic2.api.energy.event.EnergyTileLoadEvent;
+//import ic2.api.energy.event.EnergyTileUnloadEvent;
+//import ic2.api.energy.tile.IEnergyAcceptor;
+//import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,14 +22,14 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 
-public class TileEntityElectricGenerator extends TileEntity implements ITickable, IInventory, IEnergySource {
+public class TileEntityElectricGenerator extends TileEntity implements ITickable, IInventory/*, IEnergySource */ {
 	private ItemStack[] inventory;
 	private String customName;
 	
@@ -52,7 +51,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	public TileEntityElectricGenerator() {
 		this.inventory = new ItemStack[this.getSizeInventory()];
 		this.capacity = 8000;
-		this.power = EnergyNet.instance.getPowerFromTier(this.tier);
+//		this.power = EnergyNet.instance.getPowerFromTier(this.tier);
 	}
 	
 	public String getCustomName() {
@@ -68,16 +67,16 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		boolean isDirty = false;
 		
 		// Client Side
-		if (this.worldObj.isRemote) {
+		if (this.world.isRemote) {
 			
 		}
 		
 		// Server Side
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 //			LogHelper.info(this.getField(0));
 //			LogHelper.info(this.getField(2) + "/" + this.getField(3));
 			if (!this.addedToENet) {
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+//				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 				
 				this.addedToENet = true;
 			}
@@ -94,9 +93,10 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 						isDirty = true;
 						
 						if (this.inventory[0] != null) {
-							this.inventory[0].stackSize--;
+//							this.inventory[0].stackSize--;
+							this.inventory[0].setCount(this.inventory[0].getCount() - 1);
 							
-							if (this.inventory[0].stackSize == 0) {
+							if (this.inventory[0].getCount() == 0) {
 								this.inventory[0] = this.inventory[0].getItem().getContainerItem(this.inventory[0]);
 							}
 						}
@@ -126,8 +126,13 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	}
 	
 	@Override
-	public IChatComponent getDisplayName() {
-		return this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName());
+	public ITextComponent getDisplayName() {
+		return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName());
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return false;
 	}
 	
 	@Override
@@ -147,7 +152,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		if (this.getStackInSlot(index) != null) {
 			ItemStack itemstack;
 
-			if (this.getStackInSlot(index).stackSize <= count) {
+			if (this.getStackInSlot(index).getCount() <= count) {
 				itemstack = this.getStackInSlot(index);
 				this.setInventorySlotContents(index, null);
 				this.markDirty();
@@ -155,7 +160,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 			} else {
 				itemstack = this.getStackInSlot(index).splitStack(count);
 
-				if (this.getStackInSlot(index).stackSize <= 0) {
+				if (this.getStackInSlot(index).getCount() <= 0) {
 					this.setInventorySlotContents(index, null);
 				} else {
 					// Just to show that changes happened
@@ -182,10 +187,10 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		if (index < 0 || index >= this.getSizeInventory())
 	        return;
 
-	    if (stack != null && stack.stackSize > this.getInventoryStackLimit())
-	        stack.stackSize = this.getInventoryStackLimit();
+	    if (stack != null && stack.getCount() > this.getInventoryStackLimit())
+	        stack.setCount(this.getInventoryStackLimit());
 	        
-	    if (stack != null && stack.stackSize == 0)
+	    if (stack != null && stack.getCount() == 0)
 	        stack = null;
 
 	    this.inventory[index] = stack;
@@ -198,8 +203,8 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.getPos().add(0.5, 0.5, 0.5)) <= 64;
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return this.world.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.getPos().add(0.5, 0.5, 0.5)) <= 64;
 	}
 
 	@Override
@@ -252,7 +257,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		
 		nbt.setDouble("EnergyStored", this.energyStored);
@@ -277,6 +282,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		}
 		
 		// TODO Add Other Things to this
+		return nbt;
 	}
 	
 	@Override
@@ -293,7 +299,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound stackTag = list.getCompoundTagAt(i);
 			int slot = stackTag.getByte("Slot") & 255;
-			this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
+			this.setInventorySlotContents(slot, new ItemStack(stackTag));
 		}
 		
 		if (nbt.hasKey("CustomName", 8)) {
@@ -313,39 +319,39 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	@Override
 	public void onChunkUnload() {
 		if (this.addedToENet) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+//			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 			
 			this.addedToENet = false;
 		}
 	}
 	
 	// IEnergySource
-	
-	@Override
-	public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
-		if (!((this.worldObj.getBlockState(this.pos)).getBlock() instanceof BlockTEElectricGenerator)) return false;
-		EnumFacing direction = this.worldObj.getBlockState(this.pos).getValue(BlockTEElectricGenerator.FACING);
-		if (side == direction) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public double getOfferedEnergy() {
-		return Math.min(this.energyStored, this.power);
-	}
-
-	@Override
-	public void drawEnergy(double amount) {
-		this.energyStored -= amount;
-	}
-
-	@Override
-	public int getSourceTier() {
-		return this.tier;
-	}
-	
+//	
+//	@Override
+//	public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
+//		if (!((this.world.getBlockState(this.pos)).getBlock() instanceof BlockTEElectricGenerator)) return false;
+//		EnumFacing direction = this.world.getBlockState(this.pos).getValue(BlockTEElectricGenerator.FACING);
+//		if (side == direction) {
+//			return false;
+//		}
+//		return true;
+//	}
+//
+//	@Override
+//	public double getOfferedEnergy() {
+//		return Math.min(this.energyStored, this.power);
+//	}
+//
+//	@Override
+//	public void drawEnergy(double amount) {
+//		this.energyStored -= amount;
+//	}
+//
+//	@Override
+//	public int getSourceTier() {
+//		return this.tier;
+//	}
+//	
 	// End IEnergySource
 	
 	public double addEnergy(double amount) {
@@ -379,18 +385,18 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
         else {
             Item item = stack.getItem();
 
-            if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air) {
+            if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.AIR) {
                 Block block = Block.getBlockFromItem(item);
 
-                if (block == Blocks.wooden_slab) {
+                if (block == Blocks.WOODEN_SLAB) {
                     return 75;
                 }
 
-                if (block.getMaterial() == Material.wood) {
+                if (block.getMaterial(null) == Material.WOOD) {
                     return 75;
                 }
 
-                if (block == Blocks.coal_block) {
+                if (block == Blocks.COAL_BLOCK) {
                     return 4000;
                 }
             }
@@ -398,9 +404,9 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
             if (item instanceof ItemTool && ((ItemTool)item).getToolMaterialName().equals("WOOD")) return 50;
             if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD")) return 50;
             if (item instanceof ItemHoe && ((ItemHoe)item).getMaterialName().equals("WOOD")) return 50;
-            if (item == Items.stick) return 25;
-            if (item == Item.getItemFromBlock(Blocks.sapling)) return 25;
-            if (item == Items.coal) return 400;
+            if (item == Items.STICK) return 25;
+            if (item == Item.getItemFromBlock(Blocks.SAPLING)) return 25;
+            if (item == Items.COAL) return 400;
             return net.minecraftforge.fml.common.registry.GameRegistry.getFuelValue(stack);
         }
     }

@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "facing=north": { "model": "personalprojectmod:te_ore_crusher" },
-        "facing=south": { "model": "personalprojectmod:te_ore_crusher", "y": 180 },
-        "facing=west": { "model": "personalprojectmod:te_ore_crusher", "y": 270 },
-        "facing=east": { "model": "personalprojectmod:te_ore_crusher", "y": 90 }
-    }
-}

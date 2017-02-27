@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "personalprojectmod:tePowerBox" },
+        "facing=south": { "model": "personalprojectmod:tePowerBox", "y": 180 },
+        "facing=west": { "model": "personalprojectmod:tePowerBox", "y": 270 },
+        "facing=east": { "model": "personalprojectmod:tePowerBox", "y": 90 }
+    }
+}

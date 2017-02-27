@@ -5,10 +5,9 @@ import java.util.Random;
 import com.joseph.personalprojectmod.init.ModBlocks;
 import com.joseph.personalprojectmod.util.LogHelper;
 
-import net.minecraft.block.state.pattern.BlockHelper;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -31,28 +30,27 @@ public class BasicWorldGen implements IWorldGenerator {
 		
 		int diff = maxHeight - minHeight;
 		
-		for(int i = 0; i < chancesToSpawn; i++) {
+		for (int i = 0; i < chancesToSpawn; i++) {
 			int randPosX = x + rand.nextInt(16);
 			int randPosY = rand.nextInt(diff) + minHeight;
 			int randPosZ = z + rand.nextInt(16);
 			generator.generate(world, rand, new BlockPos(randPosX, randPosY, randPosZ));
 		}
 	}
-		
+	
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,
-			IChunkProvider chunkProvider) {
-		switch (world.provider.getDimensionId()) {
-		case 0: { // Overworld
-			this.runGeneratorForMinable(genBlueStoneOre, world, random, chunkX, chunkZ, 20, 0, 70);
-			break;
-		}
-		case -1: { // Nether
-			break;
-		}
-		case 1: { // The End
-			break;
-		}
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+		switch (world.provider.getDimension()) {
+			case 0: { // Overworld
+				this.runGeneratorForMinable(genBlueStoneOre, world, random, chunkX, chunkZ, 20, 0, 70);
+				break;
+			}
+			case -1: { // Nether
+				break;
+			}
+			case 1: { // The End
+				break;
+			}
 		}
 	}
 }

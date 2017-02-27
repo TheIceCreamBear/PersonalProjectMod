@@ -1,9 +1,9 @@
 package com.joseph.personalprojectmod.tileentity;
 
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergyEmitter;
-import ic2.api.energy.tile.IEnergySink;
+//import ic2.api.energy.event.EnergyTileLoadEvent;
+//import ic2.api.energy.event.EnergyTileUnloadEvent;
+//import ic2.api.energy.tile.IEnergyEmitter;
+//import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,14 +11,12 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
-public class TileEntityElectricFurnace extends TileEntity implements ITickable, IInventory, IEnergySink  {
+public class TileEntityElectricFurnace extends TileEntity implements ITickable, IInventory/*, IEnergySink*/  {
 	private ItemStack[] inventory;
 	private String customName;
 	
@@ -54,15 +52,15 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		boolean isDirty = false;
 		
 		// Client Side
-		if (this.worldObj.isRemote) {
+		if (this.world.isRemote) {
 			
 		}
 		
 		// Server Side
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			
 			if (!this.addedToENet) {
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+//				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 				this.addedToENet = true;
 			}
 			
@@ -115,8 +113,14 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	}
 	
 	@Override
-	public IChatComponent getDisplayName() {
-		return this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName());
+	public ITextComponent getDisplayName() {
+		return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName());
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	@Override
@@ -136,7 +140,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		if (this.getStackInSlot(index) != null) {
 			ItemStack itemstack;
 
-			if (this.getStackInSlot(index).stackSize <= count) {
+			if (this.getStackInSlot(index).getCount() <= count) {
 				itemstack = this.getStackInSlot(index);
 				this.setInventorySlotContents(index, null);
 				this.markDirty();
@@ -144,7 +148,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 			} else {
 				itemstack = this.getStackInSlot(index).splitStack(count);
 
-				if (this.getStackInSlot(index).stackSize <= 0) {
+				if (this.getStackInSlot(index).getCount() <= 0) {
 					this.setInventorySlotContents(index, null);
 				} else {
 					// Just to show that changes happened
@@ -178,8 +182,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		boolean flag = stack != null && stack.isItemEqual(this.inventory[index]) && ItemStack.areItemStackTagsEqual(stack, this.inventory[index]);
         this.inventory[index] = stack;
 
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
-            stack.stackSize = this.getInventoryStackLimit();
+        if (stack != null && stack.getCount() > this.getInventoryStackLimit()) {
+            stack.setCount(this.getInventoryStackLimit());
         }
 
         if (index == 0 && !flag) {
@@ -201,8 +205,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.getPos().add(0.5, 0.5, 0.5)) <= 64;
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return this.world.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.getPos().add(0.5, 0.5, 0.5)) <= 64;
 	}
 
 	@Override
@@ -258,7 +262,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		
 		nbt.setInteger("CookTimeOne", this.cookTimeOne);
@@ -287,6 +291,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		}
 		
 		// TODO Add Other Things to this
+		
+		return nbt;
 	}
 	
 	@Override
@@ -307,7 +313,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound stackTag = list.getCompoundTagAt(i);
 			int slot = stackTag.getByte("Slot") & 255;
-			this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
+			this.setInventorySlotContents(slot, new ItemStack(stackTag));
 		}
 		
 		if (nbt.hasKey("CustomName", 8)) {
@@ -329,7 +335,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 			if (stack == null) return false;
 			if (this.inventory[slot + 2] == null) return true;
 			if (!this.inventory[slot + 2].isItemEqual(stack)) return false;
-			int result = this.inventory[slot + 2].stackSize + stack.stackSize;
+			int result = this.inventory[slot + 2].getCount() + stack.getCount();
 			return result <= this.getInventoryStackLimit() && result <= this.inventory[slot + 2].getMaxStackSize();
 		}
 	}
@@ -342,11 +348,13 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 			if (this.inventory[slot + 2] == null) {
 				this.inventory[slot + 2] = stack.copy();
 			} else if (this.inventory[slot + 2].getItem() == stack.getItem()) {
-				this.inventory[slot + 2].stackSize += stack.stackSize;
+//				this.inventory[slot + 2].stackSize += stack.stackSize;
+				this.inventory[slot + 2].setCount(this.inventory[slot].getCount() + stack.getCount());
 			}
 			
-			this.inventory[slot].stackSize--;
-			if (this.inventory[slot].stackSize <= 0) {
+//			this.inventory[slot].stackSize--;
+			this.inventory[slot].setCount(this.inventory[slot].getCount() - 1);
+			if (this.inventory[slot].getCount() <= 0) {
 				this.inventory[slot] = null;
 			}
 		}
@@ -362,7 +370,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	@Override
 	public void onChunkUnload() {
 		if (this.addedToENet) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+//			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 			
 			this.addedToENet = false;
 		}
@@ -370,27 +378,27 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	
 	// ENERGY RELATED METHODS
 	
-	@Override
-	public int getSinkTier() {
-		return Integer.MAX_VALUE; // ALLOWS ANY TIER
-	}
-	
-	@Override
-	public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing direction) {
-		return true;
-	}
-	
-	@Override
-	public double getDemandedEnergy() {
-		return Math.max(0, this.capacity - this.energyStored);
-	}
-	
-	@Override
-	public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
-		energyStored += amount;
-
-		return 0;
-	}
+//	@Override
+//	public int getSinkTier() {
+//		return Integer.MAX_VALUE; // ALLOWS ANY TIER
+//	}
+//	
+//	@Override
+//	public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing direction) {
+//		return true;
+//	}
+//	
+//	@Override
+//	public double getDemandedEnergy() {
+//		return Math.max(0, this.capacity - this.energyStored);
+//	}
+//	
+//	@Override
+//	public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
+//		energyStored += amount;
+//
+//		return 0;
+//	}
 	
 	private boolean canUseEnergy(double amount) {
 		return this.energyStored >= amount;

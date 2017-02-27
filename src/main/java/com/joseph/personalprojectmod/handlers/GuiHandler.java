@@ -15,7 +15,7 @@ import com.joseph.personalprojectmod.tileentity.TileEntityOreCrusher;
 import com.joseph.personalprojectmod.tileentity.TileEntityPowerBox;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 

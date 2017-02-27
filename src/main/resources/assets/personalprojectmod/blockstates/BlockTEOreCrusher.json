@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "personalprojectmod:teOreCrusher" },
+        "facing=south": { "model": "personalprojectmod:teOreCrusher", "y": 180 },
+        "facing=west": { "model": "personalprojectmod:teOreCrusher", "y": 270 },
+        "facing=east": { "model": "personalprojectmod:teOreCrusher", "y": 90 }
+    }
+}

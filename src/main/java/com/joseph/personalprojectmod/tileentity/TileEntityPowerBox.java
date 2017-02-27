@@ -1,31 +1,26 @@
 package com.joseph.personalprojectmod.tileentity;
 
-import com.joseph.personalprojectmod.blocks.BlockTEPowerBox;
-import com.joseph.personalprojectmod.util.LogHelper;
-
-import ic2.api.energy.EnergyNet;
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergyAcceptor;
-import ic2.api.energy.tile.IEnergyEmitter;
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
-import ic2.api.info.Info;
-import ic2.api.item.ElectricItem;
+//import ic2.api.energy.EnergyNet;
+//import ic2.api.energy.event.EnergyTileLoadEvent;
+//import ic2.api.energy.event.EnergyTileUnloadEvent;
+//import ic2.api.energy.tile.IEnergyAcceptor;
+//import ic2.api.energy.tile.IEnergyEmitter;
+//import ic2.api.energy.tile.IEnergySink;
+//import ic2.api.energy.tile.IEnergySource;
+//import ic2.api.info.Info;
+//import ic2.api.item.ElectricItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
-public class TileEntityPowerBox extends TileEntity  implements ITickable, IInventory, IEnergySink, IEnergySource {
+public class TileEntityPowerBox extends TileEntity  implements ITickable, IInventory/*, IEnergySink, IEnergySource */ {
 	private ItemStack[] inventory;
 	private String customName;
 	
@@ -41,7 +36,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 	
 	public TileEntityPowerBox() {
 		this.inventory = new ItemStack[this.getSizeInventory()];
-		this.power = EnergyNet.instance.getPowerFromTier(this.tier);
+//		this.power = EnergyNet.instance.getPowerFromTier(this.tier);
 		this.capacity = 1000000;
 	}
 	
@@ -58,15 +53,15 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		boolean isDirty = false;
 		
 		// Client
-		if (this.worldObj.isRemote) {
+		if (this.world.isRemote) {
 			
 		}
 		
 		// Server
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 //			LogHelper.info(this.energyStored + "/" + this.capacity);
 			if (!this.addedToENet) {
-				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+//				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 				
 				this.addedToENet = true;
 			}
@@ -95,8 +90,14 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
-		return this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatComponentTranslation(this.getName());
+	public ITextComponent getDisplayName() {
+		return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName());
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	@Override
@@ -116,7 +117,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		if (this.getStackInSlot(index) != null) {
 			ItemStack itemstack;
 
-			if (this.getStackInSlot(index).stackSize <= count) {
+			if (this.getStackInSlot(index).getCount() <= count) {
 				itemstack = this.getStackInSlot(index);
 				this.setInventorySlotContents(index, null);
 				this.markDirty();
@@ -124,7 +125,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 			} else {
 				itemstack = this.getStackInSlot(index).splitStack(count);
 
-				if (this.getStackInSlot(index).stackSize <= 0) {
+				if (this.getStackInSlot(index).getCount() <= 0) {
 					this.setInventorySlotContents(index, null);
 				} else {
 					// Just to show that changes happened
@@ -151,10 +152,10 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		if (index < 0 || index >= this.getSizeInventory())
 	        return;
 
-	    if (stack != null && stack.stackSize > this.getInventoryStackLimit())
-	        stack.stackSize = this.getInventoryStackLimit();
+	    if (stack != null && stack.getCount() > this.getInventoryStackLimit())
+	        stack.setCount(this.getInventoryStackLimit());
 	        
-	    if (stack != null && stack.stackSize == 0)
+	    if (stack != null && stack.getCount() == 0)
 	        stack = null;
 
 	    this.inventory[index] = stack;
@@ -167,8 +168,8 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.getPos().add(0.5, 0.5, 0.5)) <= 64;
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return this.world.getTileEntity(this.getPos()) == this && player.getDistanceSq(this.getPos().add(0.5, 0.5, 0.5)) <= 64;
 	}
 
 	@Override
@@ -216,7 +217,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		
 		nbt.setDouble("EnergyStored", this.energyStored);
@@ -238,6 +239,8 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		}
 		
 		// TODO Add Other Things to this
+		
+		return nbt;
 	}
 	
 	@Override
@@ -251,7 +254,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound stackTag = list.getCompoundTagAt(i);
 			int slot = stackTag.getByte("Slot") & 255;
-			this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
+			this.setInventorySlotContents(slot, new ItemStack(stackTag));
 		}
 		
 		if (nbt.hasKey("CustomName", 8)) {
@@ -271,7 +274,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 	@Override
 	public void onChunkUnload() {
 		if (this.addedToENet) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+//			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 			
 			this.addedToENet = false;
 		}
@@ -279,83 +282,84 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 	
 	// IEnergySink
 
-	@Override
-	public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing side) {
-		if (!((this.worldObj.getBlockState(this.pos)).getBlock() instanceof BlockTEPowerBox)) return false;
-		EnumFacing direction = this.worldObj.getBlockState(this.pos).getValue(BlockTEPowerBox.FACING);
-		if (side == direction) {
-			return false;
-		}
-		return true;
-	}
-	
-	@Override
-	public double getDemandedEnergy() {
-		return Math.max(0, this.capacity - this.energyStored);
-	}
-	
-	@Override
-	public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
-		energyStored += amount;
-		return 0;
-	}
-	
-	@Override
-	public int getSinkTier() {
-		return Integer.MAX_VALUE;
-	}
-	
-	// End IEnergySink
-	
-	
-	// IEnergySource
-	@Override
-	public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
-		if (!((this.worldObj.getBlockState(this.pos)).getBlock() instanceof BlockTEPowerBox)) return false;
-		EnumFacing direction = this.worldObj.getBlockState(this.pos).getValue(BlockTEPowerBox.FACING);
-		if (side != direction) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public double getOfferedEnergy() {
-		return Math.min(this.energyStored, this.power);
-	}
-
-	@Override
-	public void drawEnergy(double amount) {
-		this.energyStored -= amount;
-	}
-
-	@Override
-	public int getSourceTier() {
-		return this.tier;
-	}
+//	@Override
+//	public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing side) {
+//		if (!((this.world.getBlockState(this.pos)).getBlock() instanceof BlockTEPowerBox)) return false;
+//		EnumFacing direction = this.world.getBlockState(this.pos).getValue(BlockTEPowerBox.FACING);
+//		if (side == direction) {
+//			return false;
+//		}
+//		return true;
+//	}
+//	
+//	@Override
+//	public double getDemandedEnergy() {
+//		return Math.max(0, this.capacity - this.energyStored);
+//	}
+//	
+//	@Override
+//	public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
+//		energyStored += amount;
+//		return 0;
+//	}
+//	
+//	@Override
+//	public int getSinkTier() {
+//		return Integer.MAX_VALUE;
+//	}
+//	
+//	// End IEnergySink
+//	
+//	
+//	// IEnergySource
+//	@Override
+//	public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
+//		if (!((this.world.getBlockState(this.pos)).getBlock() instanceof BlockTEPowerBox)) return false;
+//		EnumFacing direction = this.world.getBlockState(this.pos).getValue(BlockTEPowerBox.FACING);
+//		if (side != direction) {
+//			return false;
+//		}
+//		return true;
+//	}
+//
+//	@Override
+//	public double getOfferedEnergy() {
+//		return Math.min(this.energyStored, this.power);
+//	}
+//
+//	@Override
+//	public void drawEnergy(double amount) {
+//		this.energyStored -= amount;
+//	}
+//
+//	@Override
+//	public int getSourceTier() {
+//		return this.tier;
+//	}
 	
 	
 	// End IEnergySource
 	
 	private boolean charge(ItemStack stack) {
-		if (stack == null || !Info.isIc2Available()) return false;
+//		if (stack == null || !Info.isIc2Available()) return false;
 
-		double amount = ElectricItem.manager.charge(stack, energyStored, tier, false, false);
+//		double amount = ElectricItem.manager.charge(stack, energyStored, tier, false, false);
 
-		energyStored -= amount;
+//		energyStored -= amount;
 
-		return amount > 0;
+//		return amount > 0;
+		return false;
 	}
 	
 	private boolean discharge(ItemStack stack, int limit) {
-		if (stack == null || !Info.isIc2Available()) return false;
+//		if (stack == null || !Info.isIc2Available()) return false;
 
 		double amount = capacity - energyStored;
 		if (amount <= 0) return false;
 
 		if (limit > 0 && limit < amount) amount = limit;
 
-		amount = ElectricItem.manager.discharge(stack, amount, tier, limit > 0, true, false);
+//		amount = ElectricItem.manager.discharge(stack, amount, tier, limit > 0, true, false);
 
 		energyStored += amount;
 

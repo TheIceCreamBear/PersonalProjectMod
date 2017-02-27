@@ -2,13 +2,13 @@
 itemGroup.personalprojectmod=Personal Project Mod
 
 # Items
-item.blu_apple.name=Blueden Apple
+item.blueApple.name=Blueden Apple
 
 # Dusts
-item.blue_stone_dust.name=BlueStone Dust
+item.blueStoneDust.name=BlueStone Dust
 
 # Ingots
-item.blue_stone_ingot.name=BlueStone Ingot
+item.blueStoneIngot.name=BlueStone Ingot
 
 # Tools
 item.blue_stone_axe.name=BlueSotne Axe

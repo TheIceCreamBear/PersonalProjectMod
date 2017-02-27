@@ -1,7 +1,6 @@
 package com.joseph.personalprojectmod;
 
 import com.joseph.personalprojectmod.client.render.BlockRenderRegister;
-import com.joseph.personalprojectmod.client.render.ItemRenderRegister;
 import com.joseph.personalprojectmod.handlers.ConfigurationHandler;
 import com.joseph.personalprojectmod.handlers.GuiHandler;
 import com.joseph.personalprojectmod.init.ModBlocks;
@@ -44,13 +43,18 @@ public class PersonalProject {
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
 		
-		ModItems.createItems();
-		ModBlocks.createBlocks();
+		ModItems.init();
+		ModItems.register();
+		ModBlocks.init();
+		ModBlocks.register();
+		
 		ModTileEntities.createTileEntities();
 		
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {			
-			BlockRenderRegister.preInit();
-		}
+		proxy.preInit();
+		
+//		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {			
+//			BlockRenderRegister.preInit();
+//		}
 		
 		LogHelper.info("Pre Init Complete");
 	}
@@ -59,11 +63,7 @@ public class PersonalProject {
 	public void init(FMLInitializationEvent event) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-			ItemRenderRegister.registerItemRender();
-			BlockRenderRegister.registerBlockRender();			
-		}
-		
+		proxy.init();
 		
 		OreDictLocalReg.registerAllOreDict();
 		

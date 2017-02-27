@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "personalprojectmod:blocks/te_bottom_top",
-        "front": "personalprojectmod:blocks/te_power_box",
-        "side": "personalprojectmod:blocks/te_bottom_top"
-    }
-}
