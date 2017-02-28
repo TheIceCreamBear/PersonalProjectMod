@@ -1,6 +1,5 @@
 package com.joseph.personalprojectmod;
 
-import com.joseph.personalprojectmod.client.render.BlockRenderRegister;
 import com.joseph.personalprojectmod.handlers.ConfigurationHandler;
 import com.joseph.personalprojectmod.handlers.GuiHandler;
 import com.joseph.personalprojectmod.init.ModBlocks;
@@ -15,7 +14,6 @@ import com.joseph.personalprojectmod.util.OreDictLocalReg;
 import com.joseph.personalprojectmod.world.BasicWorldGen;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -51,10 +49,6 @@ public class PersonalProject {
 		ModTileEntities.createTileEntities();
 		
 		proxy.preInit();
-		
-//		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {			
-//			BlockRenderRegister.preInit();
-//		}
 		
 		LogHelper.info("Pre Init Complete");
 	}

@@ -1,5 +1,5 @@
 {
-    "parent":"personalprojectmod:block/te_power_box",
+    "parent":"personalprojectmod:block/teelefurnace",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

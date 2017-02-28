@@ -37,7 +37,7 @@ public class OreCrusherRecipes {
 		if (OreDictionary.doesOreNameExist("oreLead") && OreDictionary.doesOreNameExist("dustLead")) {
 			this.addCrushingRecipe(OreDictionary.getOres("oreLead").get(0), new ItemStack(OreDictionary.getOres("dustLead").get(0).getItem(), 2, OreDictionary.getOres("dustLead").get(0).getMetadata()));
 		}
-		this.addCrushingForBlock(ModBlocks.blueStoneOre, new ItemStack(ModItems.blueStoneDust, 2));
+		this.addCrushingForBlock(ModBlocks.bluStnOre, new ItemStack(ModItems.blueStoneDust, 2));
 	}
 	
 	public ItemStack getReslut(ItemStack stack) {

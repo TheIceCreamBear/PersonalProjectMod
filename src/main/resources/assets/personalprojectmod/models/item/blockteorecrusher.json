@@ -1,5 +1,5 @@
 {
-    "parent":"personalprojectmod:block/te_ele_generator",
+    "parent":"personalprojectmod:block/teorecrusher",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

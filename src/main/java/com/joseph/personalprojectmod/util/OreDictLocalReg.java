@@ -7,7 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class OreDictLocalReg {
 	public static void registerAllOreDict() {
-		OreDictionary.registerOre("oreBlueStone", ModBlocks.blueStoneOre);
+		OreDictionary.registerOre("oreBlueStone", ModBlocks.bluStnOre);
 		OreDictionary.registerOre("dustBlueStone", ModItems.blueStoneDust);
 		OreDictionary.registerOre("ingotBlueStone", ModItems.blueStoneIngot);
 	}

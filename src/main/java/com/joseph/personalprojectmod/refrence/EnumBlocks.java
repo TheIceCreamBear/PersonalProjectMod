@@ -1,7 +1,7 @@
 package com.joseph.personalprojectmod.refrence;
 
 public enum EnumBlocks {
-	BLUE_STONE_ORE("blueStoneOre", "BlueStoneOre"),
+	BLUE_STONE_ORE("bluStnOre", "BlueStoneOre"),
 	TE_ELE_FURNACE("teEleFurnace", "BlockTEElectricFurnace"),
 	TE_ELE_GENERATOR("teEleGenerator", "BlockTEElectricGenerator"),
 	TE_ORE_CRUSHER("teOreCrusher", "BlockTEOreCrusher"),

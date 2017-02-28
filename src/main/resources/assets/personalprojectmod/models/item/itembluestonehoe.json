@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "personalprojectmod:items/blue_stone_hoe"
+    }
+}

@@ -1,5 +1,5 @@
 {
-    "parent":"personalprojectmod:block/te_ore_crusher",
+    "parent":"personalprojectmod:block/teelegenerator",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

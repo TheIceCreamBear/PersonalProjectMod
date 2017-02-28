@@ -67,7 +67,7 @@ public class ModBlockOre extends Block {
         if (this.getItemDropped(state, rand, fortune) != Item.getItemFromBlock(this)) {
             int i = 0;
 
-            if (this == ModBlocks.blueStoneOre) {
+            if (this == ModBlocks.bluStnOre) {
                 i = MathHelper.getInt(rand, 2, 5);
             }
 

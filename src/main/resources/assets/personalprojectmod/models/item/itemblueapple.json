@@ -1,5 +1,5 @@
 {
-    "parent":"personalprojectmod:item/standard_item",
+    "parent":"item/handheld",
     "textures": {
         "layer0":"personalprojectmod:items/blu_apple"
     }

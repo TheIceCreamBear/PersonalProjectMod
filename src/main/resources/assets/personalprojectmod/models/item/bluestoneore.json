@@ -1,5 +1,5 @@
 {
-    "parent":"personalprojectmod:block/blue_stone_ore",
+    "parent":"personalprojectmod:block/bluStnOre",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

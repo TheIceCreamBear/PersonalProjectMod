@@ -16,7 +16,7 @@ public class BasicWorldGen implements IWorldGenerator {
 	private WorldGenMinable genBlueStoneOre; // BlueStoneOre (Overworld)
 	
 	public BasicWorldGen() {
-		this.genBlueStoneOre = new WorldGenMinable(ModBlocks.blueStoneOre.getDefaultState(), 8);
+		this.genBlueStoneOre = new WorldGenMinable(ModBlocks.bluStnOre.getDefaultState(), 8);
 	}
 	
 	private void runGeneratorForMinable(WorldGenMinable generator, World world, Random rand, int chunkX, int chunkZ, int chancesToSpawn, int minHeight, int maxHeight) {

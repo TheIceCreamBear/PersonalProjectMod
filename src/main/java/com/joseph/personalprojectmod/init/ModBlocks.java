@@ -8,20 +8,23 @@ import com.joseph.personalprojectmod.blocks.BlueStoneOre;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlocks {
-	public static Block blueStoneOre;
+	public static Block bluStnOre;
 	public static Block teOreCrusher;
 	public static Block teEleFurnace;
 	public static Block teEleGenerator;
 	public static Block tePowerBox;
 	
 	public static void init() {
-		blueStoneOre = new BlueStoneOre();
+		bluStnOre = new BlueStoneOre();
 		teOreCrusher = new BlockTEOreCrusher();
 		teEleFurnace = new BlockTEElectricFurnace();
 		teEleGenerator = new BlockTEElectricGenerator();
@@ -30,13 +33,21 @@ public class ModBlocks {
 	
 	public static void register() {
 		// Blocks
-		regBlock(blueStoneOre);
+		regBlock(bluStnOre);
 		
 		// TileEntities
 		regBlock(teEleFurnace);
 		regBlock(teEleGenerator);
 		regBlock(teOreCrusher);
 		regBlock(tePowerBox);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void registerVariants() {
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.teEleFurnace), new ModelResourceLocation(ModBlocks.teEleFurnace.getRegistryName(), "inventory"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.teOreCrusher), new ModelResourceLocation(ModBlocks.teEleGenerator.getRegistryName(), "inventory"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.teEleGenerator), new ModelResourceLocation(ModBlocks.teOreCrusher.getRegistryName(), "inventory"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.tePowerBox), new ModelResourceLocation(ModBlocks.tePowerBox.getRegistryName(), "inventory"));
 	}
 	
 	private static void regBlock(Block block) {
@@ -48,7 +59,7 @@ public class ModBlocks {
 	
 	public static void registerRenders() {
 		// Blocks
-		regRenderBlock(blueStoneOre);
+		regRenderBlock(bluStnOre);
 		
 		// TileEntities
 		regRenderBlock(teEleFurnace);

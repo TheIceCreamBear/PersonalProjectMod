@@ -2,7 +2,7 @@ package com.joseph.personalprojectmod.refrence;
 
 public enum EnumItems {
 	BLUE_STONE_INGOT("blueStoneIngot", "ItemBlueStoneIngot"),
-	BLUE_STONE_DUST("blueStoneDust", "ItemBlusStoneDust"),
+	BLUE_STONE_DUST("blueStoneDust", "ItemBlueStoneDust"),
 	BLUE_APPLE("blueApple", "ItemBlueApple"),
 	BLUE_STONE_PICKAXE("blueStonePickaxe", "ItemBlueStonePickaxe"),
 	BLUE_STONE_AXE("blueStoneAxe", "ItemBlueStoneAxe"),

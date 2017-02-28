@@ -13,6 +13,7 @@ public class ModFood extends ItemFood {
 	
 	public ModFood(int amount, float saturation, boolean isWolf, PotionEffect... effects) {
 		super(amount, saturation, isWolf);
+		this.setCreativeTab(CreativeTabsPPM.PPM_FOOD_TAB);
 		this.effects = effects;
 	}
 
