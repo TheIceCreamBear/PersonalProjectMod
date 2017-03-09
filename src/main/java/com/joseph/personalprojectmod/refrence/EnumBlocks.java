@@ -5,7 +5,8 @@ public enum EnumBlocks {
 	TE_ELE_FURNACE("teEleFurnace", "BlockTEElectricFurnace"),
 	TE_ELE_GENERATOR("teEleGenerator", "BlockTEElectricGenerator"),
 	TE_ORE_CRUSHER("teOreCrusher", "BlockTEOreCrusher"),
-	TE_POWER_BOX("tePowerBox", "BlockTEPowerBox")
+	TE_POWER_BOX("tePowerBox", "BlockTEPowerBox"),
+	GOLD_BRICK("goldenbrickblock", "GoldInfusedBrickBlock")
 	;
 	private String unlocalizedName;
 	private String registryName;

@@ -12,15 +12,16 @@ public enum EnumItems {
 	BLUE_STONE_HELMET("blueStoneHelmet", "ItemBlueStoneHelmet"),
 	BLUE_STONE_CHEST("blueStoneChestplate", "ItemBlueStoneChestplate"),
 	BLUE_STONE_LEGS("blueStoneLeggings", "ItemBlueStoneLeggings"),
-	BLUE_STONE_BOOTS("blueStoneBoots", "ItemBlueStoneBoots")
+	BLUE_STONE_BOOTS("blueStoneBoots", "ItemBlueStoneBoots"),
+	BLUE_STONE_SICKLE("BLUESTONESICKLE", "ItemBlueStoneSickle")
 	;
 	
 	private String unlocalizedName;
 	private String registryName;
 	
 	EnumItems(String unlocalizedName, String registryName) {
-		this.unlocalizedName = unlocalizedName;
-		this.registryName = registryName;
+		this.unlocalizedName = unlocalizedName.toLowerCase();
+		this.registryName = registryName.toLowerCase();
 	}
 	
 	public String getUnlocalizedName() {

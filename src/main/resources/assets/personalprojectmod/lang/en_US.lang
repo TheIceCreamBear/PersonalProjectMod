@@ -4,28 +4,30 @@ itemGroup.personalprojectmod.tools=Personal Project Mod Tools
 itemGroup.personalprojectmod.food=Personal Project Mod Food
 
 # Items
-item.blueApple.name=Blueden Apple
+item.blueapple.name=Blueden Apple
 
 # Dusts
-item.blueStoneDust.name=BlueStone Dust
+item.bluestonedust.name=BlueStone Dust
 
 # Ingots
-item.blueStoneIngot.name=BlueStone Ingot
+item.bluestoneingot.name=BlueStone Ingot
 
 # Tools
-item.blueStoneAxe.name=BlueSotne Axe
-item.blueStonePickaxe.name=BlueStone Pickaxe
-item.blueStoneHoe.name=BlueStone Hoe
-item.blueStoneSpade.name=BlueStone Shovel
-item.blueStoneSword.name=BlueSotne Sword
+item.bluestoneaxe.name=BlueStone Axe
+item.bluestonepickaxe.name=BlueStone Pickaxe
+item.bluestonehoe.name=BlueStone Hoe
+item.bluestonespade.name=BlueStone Shovel
+item.bluestonesword.name=BlueStone Sword
+item.bluestonesickle.name=BlueStone Sickle
 
 # Blocks
+tile.goldenbrickblock.name=Gold Infused Bricks
 
 # Tile Entities
-tile.teOreCrusher.name=Ore Crusher
-tile.teEleFurnace.name=Electric Furnace
-tile.teEleGenerator.name=Electric Generator
-tile.tePowerBox.name=Power Storage Box
+tile.teorecrusher.name=Ore Crusher
+tile.teelefurnace.name=Electric Furnace
+tile.teelegenerator.name=Electric Generator
+tile.tepowerbox.name=Power Storage Box
 
 # Ores
 tile.bluStnOre.name=BlueStone Ore
@@ -37,7 +39,7 @@ container.personalprojectmod:ele_generator=Electric Generator
 container.personalprojectmod:power_box=Power Storage Box
 
 # Armor
-item.blueStoneHelmet.name=BlueStone Helmet
-item.blueStoneChestplate.name=BlueStone Chestplate
-item.blueStoneLeggings.name=BlueStone Leggings
-item.blueStoneBoots.name=BlueStone Boots
+item.bluestonehelmet.name=BlueStone Helmet
+item.bluestonechestplate.name=BlueStone Chestplate
+item.bluestoneleggings.name=BlueStone Leggings
+item.bluestoneboots.name=BlueStone Boots

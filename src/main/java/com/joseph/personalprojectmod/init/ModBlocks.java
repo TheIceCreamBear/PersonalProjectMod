@@ -5,11 +5,13 @@ import com.joseph.personalprojectmod.blocks.BlockTEElectricGenerator;
 import com.joseph.personalprojectmod.blocks.BlockTEOreCrusher;
 import com.joseph.personalprojectmod.blocks.BlockTEPowerBox;
 import com.joseph.personalprojectmod.blocks.BlueStoneOre;
+import com.joseph.personalprojectmod.blocks.GoldInfusedBrickBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -17,23 +19,33 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlocks {
+	// Blocks
 	public static Block bluStnOre;
+	public static Block goldenBrickBlock;
+	
+	// TileEntities
 	public static Block teOreCrusher;
 	public static Block teEleFurnace;
 	public static Block teEleGenerator;
 	public static Block tePowerBox;
 	
 	public static void init() {
+		// Blocks
 		bluStnOre = new BlueStoneOre();
+		goldenBrickBlock = new GoldInfusedBrickBlock();
+		
+		// TileEntities
 		teOreCrusher = new BlockTEOreCrusher();
 		teEleFurnace = new BlockTEElectricFurnace();
 		teEleGenerator = new BlockTEElectricGenerator();
 		tePowerBox = new BlockTEPowerBox();
+		
 	}
 	
 	public static void register() {
 		// Blocks
 		regBlock(bluStnOre);
+		regBlock(goldenBrickBlock);
 		
 		// TileEntities
 		regBlock(teEleFurnace);
@@ -60,6 +72,7 @@ public class ModBlocks {
 	public static void registerRenders() {
 		// Blocks
 		regRenderBlock(bluStnOre);
+		regRenderBlock(goldenBrickBlock);
 		
 		// TileEntities
 		regRenderBlock(teEleFurnace);

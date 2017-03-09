@@ -106,7 +106,7 @@ public class ContainerTEElectricFurnace extends Container {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int fromSlot) {
-		ItemStack previous = null;
+		ItemStack previous = ItemStack.EMPTY;
 		Slot slot = (Slot) this.inventorySlots.get(fromSlot);
 		
 		if (slot != null && slot.getHasStack()) {
@@ -115,12 +115,12 @@ public class ContainerTEElectricFurnace extends Container {
 			
 			if (fromSlot == 2 || fromSlot == 3) {
 				if (!this.mergeItemStack(current, 4, 40, true))
-					return null;
+					return ItemStack.EMPTY;
 				
 				slot.onSlotChange(current, previous);
 			} else if (fromSlot != 0 && fromSlot != 1) {
 				
-				if (FurnaceRecipes.instance().getSmeltingResult(current) != null) {
+				if (FurnaceRecipes.instance().getSmeltingResult(current) != null && FurnaceRecipes.instance().getSmeltingResult(current) != ItemStack.EMPTY) {
 					
 					ItemStack stack = FurnaceRecipes.instance().getSmeltingResult(current);
 					
@@ -130,7 +130,7 @@ public class ContainerTEElectricFurnace extends Container {
 						
 						if (stack.getItem() == stack1.getItem()) {
 							if (!this.mergeItemStack(current, 0, 1, false))
-								return null;
+								return ItemStack.EMPTY;
 						}
 					} else if (this.inventorySlots.get(4) != null && this.inventorySlots.get(4).getHasStack()) {
 						
@@ -138,24 +138,24 @@ public class ContainerTEElectricFurnace extends Container {
 						
 						if (stack.getItem() == stack1.getItem()) {
 							if (!this.mergeItemStack(current, 1, 2, false))
-								return null;
+								return ItemStack.EMPTY;
 						}
 					} else if (!this.mergeItemStack(current, 0, 2, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 			} else if (!this.mergeItemStack(current, 4, 40, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 			
 			if (current.getCount() == 0) {
-				slot.putStack((ItemStack) null);
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
 			
 			if (current.getCount() == previous.getCount()) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 			slot.onTake(playerIn, current);
 		}

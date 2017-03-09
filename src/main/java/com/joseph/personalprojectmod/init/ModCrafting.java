@@ -22,9 +22,11 @@ public class ModCrafting {
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueStoneLeggings), new Object[] {"###", "# #", "# #", '#', ModItems.blueStoneIngot});
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueStoneBoots), new Object[] {"# #", "# #", "   ", '#', ModItems.blueStoneIngot});
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueStoneBoots), new Object[] {"   ", "# #", "# #", '#', ModItems.blueStoneIngot});
-		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.teOreCrusher)), new Object[] {"###", "#I#", "#$#", '#', Items.IRON_INGOT, 'I', Items.REDSTONE, '$', ModItems.blueStoneIngot});
+		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.teOreCrusher)), new Object[] {"###", "#I#", "#$#", '#', Items.IRON_INGOT, 'I', Items.REDSTONE, '$', ModItems.blueStoneIngot}); // TODO change
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.teEleFurnace)), new Object[] {"###", "#F#", "#R#", '#', Items.IRON_INGOT, 'F', Item.getItemFromBlock(Blocks.FURNACE), 'R', Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)});
+		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.teEleGenerator)), new Object[] {"FFF", "FRF", "BfB", 'F', Items.IRON_INGOT, 'R', Item.getItemFromBlock(Blocks.REDSTONE_BLOCK), 'B', ModItems.blueStoneIngot, 'f', Item.getItemFromBlock(Blocks.FURNACE)});
+		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.tePowerBox)), new Object[] {"FBF", "BRB", "FBF", 'F', Items.IRON_INGOT, 'R', Item.getItemFromBlock(Blocks.REDSTONE_BLOCK), 'B', ModItems.blueStoneIngot});
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueApple), new Object[] {"###", "#I#", "###", '#', ModItems.blueStoneIngot, 'I', Items.APPLE});
-		
+		GameRegistry.addRecipe(new ItemStack(ModItems.BLUESTONESICKLE), new Object[] {" B ", "  B", "SB ", 'B', ModItems.blueStoneIngot, 'S', Items.STICK});
 	}
 }

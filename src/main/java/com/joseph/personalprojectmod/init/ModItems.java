@@ -5,13 +5,12 @@ import com.joseph.personalprojectmod.items.ItemBlueStoneDust;
 import com.joseph.personalprojectmod.items.ItemBlueStoneIngot;
 import com.joseph.personalprojectmod.items.ModArmor;
 import com.joseph.personalprojectmod.items.ModAxe;
-import com.joseph.personalprojectmod.items.ModFood;
 import com.joseph.personalprojectmod.items.ModHoe;
 import com.joseph.personalprojectmod.items.ModPickaxe;
+import com.joseph.personalprojectmod.items.ModSickle;
 import com.joseph.personalprojectmod.items.ModSpade;
 import com.joseph.personalprojectmod.items.ModSword;
 import com.joseph.personalprojectmod.refrence.EnumItems;
-import com.joseph.personalprojectmod.refrence.Refrence;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,8 +19,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -36,6 +33,7 @@ public final class ModItems {
 	public static Item blueStoneHoe;
 	public static Item blueStoneSpade;
 	public static Item blueStoneSword;
+	public static Item BLUESTONESICKLE;
 	
 	// Armor
 	public static Item blueStoneHelmet;
@@ -61,8 +59,9 @@ public final class ModItems {
 		blueStonePickaxe = new ModPickaxe(BLUE_STONE, EnumItems.BLUE_STONE_PICKAXE.getUnlocalizedName(), EnumItems.BLUE_STONE_PICKAXE.getRegistryName());
 		blueStoneAxe = new ModAxe(BLUE_STONE, EnumItems.BLUE_STONE_AXE.getUnlocalizedName(), EnumItems.BLUE_STONE_AXE.getRegistryName());
 		blueStoneHoe = new ModHoe(BLUE_STONE, EnumItems.BLUE_STONE_HOE.getUnlocalizedName(), EnumItems.BLUE_STONE_HOE.getRegistryName());
-		blueStoneSpade = new ModSpade(BLUE_STONE, EnumItems.BLUE_STONE_SPADE.getUnlocalizedName(), EnumItems.BLUE_STONE_SPADE.getRegistryName());
+		blueStoneSpade = new ModSpade(BLUE_STONE, EnumItems.BLUE_STONE_SPADE.getUnlocalizedName(), EnumItems.BLUE_STONE_SPADE.getRegistryName(), 13.0f);
 		blueStoneSword = new ModSword(BLUE_STONE, EnumItems.BLUE_STONE_SWORD.getUnlocalizedName(), EnumItems.BLUE_STONE_SWORD.getRegistryName());
+		BLUESTONESICKLE = new ModSickle(BLUE_STONE, EnumItems.BLUE_STONE_SICKLE.getUnlocalizedName(), EnumItems.BLUE_STONE_SICKLE.getRegistryName());
 		
 		// Armor
 		blueStoneHelmet = new ModArmor(EnumItems.BLUE_STONE_HELMET.getUnlocalizedName(), EnumItems.BLUE_STONE_HELMET.getRegistryName(), BLUE_STONE_ARMOR, 1, EntityEquipmentSlot.HEAD);
@@ -84,6 +83,7 @@ public final class ModItems {
 		GameRegistry.register(blueStoneHoe);
 		GameRegistry.register(blueStoneSpade);
 		GameRegistry.register(blueStoneSword);
+		GameRegistry.register(BLUESTONESICKLE);
 		
 		// Armor
 		GameRegistry.register(blueStoneHelmet);
@@ -104,6 +104,7 @@ public final class ModItems {
 		regRenderItem(blueStoneHoe);
 		regRenderItem(blueStoneSpade);
 		regRenderItem(blueStoneSword);
+		regRenderItem(BLUESTONESICKLE);
 		
 		// Armor
 		regRenderItem(blueStoneHelmet);
