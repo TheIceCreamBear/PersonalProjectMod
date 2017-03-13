@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemHoe;
@@ -24,13 +25,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityElectricGenerator extends TileEntity implements ITickable, IInventory/*, IEnergySource */ {
-	private ItemStack[] inventory;
+	private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 	private String customName;
 	
 	// Power Generation stuff
@@ -49,7 +51,6 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	// End Energy Stuff
 	
 	public TileEntityElectricGenerator() {
-		this.inventory = new ItemStack[this.getSizeInventory()];
 		this.capacity = 8000;
 //		this.power = EnergyNet.instance.getPowerFromTier(this.tier);
 	}
@@ -86,18 +87,18 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 				
 			}
 			
-			if (this.isBruning() || this.inventory[0] != null) {
-				if (!this.isBruning() && isItemFuel(this.inventory[0]) && !this.isBufferFull()) {
-					this.maxBurnTime = this.brunTime = getItemBurnTime(this.inventory[0]);
+			if (this.isBruning() || !this.stacks.get(0).isEmpty()) {
+				if (!this.isBruning() && isItemFuel(this.stacks.get(0)) && !this.isBufferFull()) {
+					this.maxBurnTime = this.brunTime = getItemBurnTime(this.stacks.get(0));
 					if (this.isBruning()) {
 						isDirty = true;
 						
-						if (this.inventory[0] != null) {
+						if (!this.stacks.get(0).isEmpty()) {
 //							this.inventory[0].stackSize--;
-							this.inventory[0].setCount(this.inventory[0].getCount() - 1);
+							this.stacks.get(0).shrink(1);
 							
-							if (this.inventory[0].getCount() == 0) {
-								this.inventory[0] = this.inventory[0].getItem().getContainerItem(this.inventory[0]);
+							if (this.stacks.get(0).getCount() == 0) {
+								this.stacks.set(0, this.stacks.get(0).getItem().getContainerItem(this.stacks.get(0))); // FOR fluids
 							}
 						}
 					}
@@ -136,65 +137,35 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	}
 	
 	@Override
-	public int getSizeInventory() { 
+	public int getSizeInventory() {
 		return 1;
 	}
 	
 	@Override
 	public ItemStack getStackInSlot(int index) {
-		if (index < 0 || index >= this.getSizeInventory())
-	        return null;
-	    return this.inventory[index];
+		return (ItemStack) this.stacks.get(index);
 	}
 	
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if (this.getStackInSlot(index) != null) {
-			ItemStack itemstack;
-
-			if (this.getStackInSlot(index).getCount() <= count) {
-				itemstack = this.getStackInSlot(index);
-				this.setInventorySlotContents(index, null);
-				this.markDirty();
-				return itemstack;
-			} else {
-				itemstack = this.getStackInSlot(index).splitStack(count);
-
-				if (this.getStackInSlot(index).getCount() <= 0) {
-					this.setInventorySlotContents(index, null);
-				} else {
-					// Just to show that changes happened
-					this.setInventorySlotContents(index, this.getStackInSlot(index));
-				}
-
-				this.markDirty();
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
+		return ItemStackHelper.getAndSplit(stacks, index, count);
 	}
 	
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		ItemStack stack = this.getStackInSlot(index);
-	    this.setInventorySlotContents(index, null);
-	    return stack;
+		return ItemStackHelper.getAndRemove(stacks, index);
 	}
-
+	
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		if (index < 0 || index >= this.getSizeInventory())
-	        return;
-
-	    if (stack != null && stack.getCount() > this.getInventoryStackLimit())
-	        stack.setCount(this.getInventoryStackLimit());
-	        
-	    if (stack != null && stack.getCount() == 0)
-	        stack = null;
-
-	    this.inventory[index] = stack;
-	    this.markDirty();
+			return;
+		
+		if (stack.getCount() > this.getInventoryStackLimit())
+			stack.setCount(this.getInventoryStackLimit());
+		
+		this.stacks.set(index, stack);
+		this.markDirty();
 	}
 	
 	@Override
@@ -251,9 +222,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	
 	@Override
 	public void clear() {
-		for (int i = 0; i < this.getSizeInventory(); i++) {
-			this.setInventorySlotContents(i, null);
-		}
+		this.stacks.clear();
 	}
 	
 	@Override
@@ -266,16 +235,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		nbt.setInteger("BurnTime", this.brunTime);
 		nbt.setInteger("MaxBurnTime", this.maxBurnTime);
 		
-		NBTTagList list = new NBTTagList();
-		for (int i = 0; i < this.getSizeInventory(); i++) {
-			if (this.getStackInSlot(i) != null) {
-				NBTTagCompound stackTag = new NBTTagCompound();
-				stackTag.setByte("Slot", (byte)i);
-				this.getStackInSlot(i).writeToNBT(stackTag);
-				list.appendTag(stackTag);
-			}
-		}
-		nbt.setTag("Items", list);
+		ItemStackHelper.saveAllItems(nbt, stacks);
 		
 		if (this.hasCustomName()) {
 			nbt.setString("CustomeName", this.getCustomName());
@@ -295,12 +255,8 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		this.brunTime = nbt.getInteger("BurnTime");
 		this.maxBurnTime = nbt.getInteger("MaxBurnTime");
 		
-		NBTTagList list = nbt.getTagList("Items", 10);
-		for (int i = 0; i < list.tagCount(); i++) {
-			NBTTagCompound stackTag = list.getCompoundTagAt(i);
-			int slot = stackTag.getByte("Slot") & 255;
-			this.setInventorySlotContents(slot, new ItemStack(stackTag));
-		}
+		this.stacks = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
+		ItemStackHelper.loadAllItems(nbt, stacks);
 		
 		if (nbt.hasKey("CustomName", 8)) {
 			this.setCustomName(nbt.getString("CustomeName"));

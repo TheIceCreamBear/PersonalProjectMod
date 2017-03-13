@@ -89,7 +89,7 @@ public class ContainerTEPowerBox extends Container {
 	            slot.onSlotChanged();
 
 	        if (current.getCount() == previous.getCount())
-	            return null;
+	            return ItemStack.EMPTY;
 	        slot.onTake(playerIn, current);
 	    }
 	    return previous;

@@ -2,50 +2,40 @@ package com.joseph.personalprojectmod.blocks;
 
 import java.util.Random;
 
-import com.joseph.personalprojectmod.PersonalProject;
 import com.joseph.personalprojectmod.creativetabs.CreativeTabsPPM;
 import com.joseph.personalprojectmod.init.ModBlocks;
 import com.joseph.personalprojectmod.refrence.EnumBlocks;
-import com.joseph.personalprojectmod.refrence.GuiIDRef;
 import com.joseph.personalprojectmod.tileentity.TileEntityElectricFurnace;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockTEElectricFurnace extends BlockContainer {
+public class BlockTODOForgeTMPCLASS extends Block {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
-	public BlockTEElectricFurnace() {
-		super(Material.IRON);
-		this.setUnlocalizedName(EnumBlocks.TE_ELE_FURNACE.getUnlocalizedName());
-		this.setRegistryName(EnumBlocks.TE_ELE_FURNACE.getRegistryName());
-		this.setHardness(2.0f);
-		this.setResistance(6.0f);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+	public BlockTODOForgeTMPCLASS() {
+		super(Material.ROCK);
+		this.setUnlocalizedName(EnumBlocks.TODO_FORGE.getUnlocalizedName());
+		this.setRegistryName(EnumBlocks.TODO_FORGE.getRegistryName());
 		this.setCreativeTab(CreativeTabsPPM.PPM_ITEMS_TAB);
-		this.setHarvestLevel("pickaxe", 1);
-		this.setLightLevel(10.0f);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return Item.getItemFromBlock(ModBlocks.teEleFurnace);
+		return Item.getItemFromBlock(ModBlocks.todoForge);
 	}
 	
 	@Override
@@ -77,26 +67,6 @@ public class BlockTEElectricFurnace extends BlockContainer {
             worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
         }
     }
-
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityElectricFurnace();
-	}
-	
-	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		TileEntity te = world.getTileEntity(pos);
-		
-		if (te instanceof TileEntityElectricFurnace) {			
-			InventoryHelper.dropInventoryItems(world, pos, (TileEntityElectricFurnace) te);
-		}
-		super.breakBlock(world, pos, state);
-	}
-	
-//	@Override
-//	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-//		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-//	}
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
@@ -109,25 +79,6 @@ public class BlockTEElectricFurnace extends BlockContainer {
 				((TileEntityElectricFurnace)world.getTileEntity(pos)).setCustomName(stack.getDisplayName());
 			}
 		}
-	}
-	
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
-	}
-	
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote) {
-			player.openGui(PersonalProject.instance, GuiIDRef.ELECTRIC_FURNAE_GUI, world, pos.getX(), pos.getY(), pos.getZ());
-			return true;
-		}
-		return true;
-	}
-	
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {FACING});
 	}
 	
 	@Override
@@ -150,4 +101,28 @@ public class BlockTEElectricFurnace extends BlockContainer {
 
         return this.getDefaultState().withProperty(FACING, facing);
 	}
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] {FACING});
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+//		return false;
+		return true;
+	}
+
+	@Override
+	public BlockRenderLayer getBlockLayer() {
+//		return BlockRenderLayer.TRANSLUCENT;
+		return BlockRenderLayer.CUTOUT;
+	}
+	
+	
 }

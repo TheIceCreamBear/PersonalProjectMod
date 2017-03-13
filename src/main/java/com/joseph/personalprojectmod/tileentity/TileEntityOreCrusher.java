@@ -8,18 +8,19 @@ import com.joseph.personalprojectmod.recipie.OreCrusherRecipes;
 //import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class TileEntityOreCrusher extends TileEntity implements ITickable, IInventory/*, IEnergySink */ {
-
-	private ItemStack[] inventory;
+	private NonNullList<ItemStack> stacks = NonNullList.withSize(3, ItemStack.EMPTY);
 	private String customName;
 	
 	private int crushTime;
@@ -35,7 +36,6 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 	// End Power Stuff
 	
 	public TileEntityOreCrusher() {
-		this.inventory = new ItemStack[this.getSizeInventory()];
 		this.capacity = 10000;
 	}
 	
@@ -58,30 +58,27 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
     		
     	// Server Side
     	if (!this.world.isRemote) {
-//    		LogHelper.info(this.energyStored + "/" + this.capacity);
-    		
 //    		if (!this.addedToENet) {MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this)); this.addedToENet = true;}
-    		
-    		if (this.canCrush()) {
-    			if (this.useEnergy(4)) {    				
-    				this.crushTime++;
-    				
-    				if (this.crushTime == this.totalCrushTime) {
-    					this.crushTime = 0;
-    					this.totalCrushTime = this.getCrushTime(this.inventory[0]);
-    					this.crushItem();
-    					isDirty = true;
-    				}
-    			}
-    		} else {
-    			this.crushTime = 0;
-    		}
-    	}
-    	
-    	if (isDirty) {
-    		this.markDirty();
-    	}
-    }
+			if (this.canCrush()) {
+				if (this.useEnergy(4)) {
+					this.crushTime++;
+					
+					if (this.crushTime == this.totalCrushTime) {
+						this.crushTime = 0;
+						this.totalCrushTime = this.getCrushTime(this.stacks.get(0));
+						this.crushItem();
+						isDirty = true;
+					}
+				}
+			} else {
+				this.crushTime = 0;
+			}
+		}
+		
+		if (isDirty) {
+			this.markDirty();
+		}
+	}
     
 	@Override
 	public String getName() {
@@ -100,8 +97,12 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 	
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		for (ItemStack iStack : stacks) {
+			if (!iStack.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -111,62 +112,31 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 
 	@Override
 	public ItemStack getStackInSlot(int index) {
-		if (index < 0 || index >= this.getSizeInventory())
-	        return null;
-	    return this.inventory[index];
+	    return (ItemStack)this.stacks.get(index);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if (this.getStackInSlot(index) != null) {
-			ItemStack itemstack;
-
-			if (this.getStackInSlot(index).getCount() <= count) {
-				itemstack = this.getStackInSlot(index);
-				this.setInventorySlotContents(index, null);
-				this.markDirty();
-				return itemstack;
-			} else {
-				itemstack = this.getStackInSlot(index).splitStack(count);
-
-				if (this.getStackInSlot(index).getCount() <= 0) {
-					this.setInventorySlotContents(index, null);
-				} else {
-					// Just to show that changes happened
-					this.setInventorySlotContents(index, this.getStackInSlot(index));
-				}
-
-				this.markDirty();
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
+		return ItemStackHelper.getAndSplit(stacks, index, count);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		if (this.getStackInSlot(index) != null) {
-			ItemStack stack = this.getStackInSlot(index);
-			this.setInventorySlotContents(index, null);
-			return stack;
-		} else {
-			return null;
-		}
+		return ItemStackHelper.getAndRemove(stacks, index);
 	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		if (index < 0 || index >= this.getSizeInventory())
 	        return;
+		ItemStack itemstack = this.stacks.get(index);
+		boolean flag = stack != null && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
 
-		boolean flag = stack != null && stack.isItemEqual(this.inventory[index]) && ItemStack.areItemStackTagsEqual(stack, this.inventory[index]);
-        this.inventory[index] = stack;
-
-        if (stack != null && stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
-        }
+		if (stack.getCount() > this.getInventoryStackLimit()) {
+			stack.setCount(this.getInventoryStackLimit());
+		}
         
+		this.stacks.set(index, stack);
         if (index == 0 && !flag) {
         	this.totalCrushTime = this.getCrushTime(stack);
         	this.crushTime = 0;
@@ -227,9 +197,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < this.getSizeInventory(); i++) {
-			this.setInventorySlotContents(i, null);
-		}
+		this.stacks.clear();
 	}
 	
 	@Override
@@ -244,16 +212,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		nbt.setDouble("Capacity", this.capacity);
 		// End Energy
 		
-		NBTTagList list = new NBTTagList();
-		for (int i = 0; i < this.getSizeInventory(); i++) {
-			if (this.getStackInSlot(i) != null) {
-				NBTTagCompound stackTag = new NBTTagCompound();
-				stackTag.setByte("Slot", (byte)i);
-				this.getStackInSlot(i).writeToNBT(stackTag);
-				list.appendTag(stackTag);
-			}
-		}
-		nbt.setTag("Items", list);
+		ItemStackHelper.saveAllItems(nbt, stacks);
 		
 		if (this.hasCustomName()) {
 			nbt.setString("CustomeName", this.getCustomName());
@@ -276,12 +235,8 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		this.capacity = nbt.getDouble("Capacity");
 		// End Energy
 		
-		NBTTagList list = nbt.getTagList("Items", 10);
-		for (int i = 0; i < list.tagCount(); i++) {
-			NBTTagCompound stackTag = list.getCompoundTagAt(i);
-			int slot = stackTag.getByte("Slot") & 255;
-			this.setInventorySlotContents(slot, new ItemStack(stackTag));
-		}
+		this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+		ItemStackHelper.loadAllItems(nbt, stacks);
 		
 		if (nbt.hasKey("CustomName", 8)) {
 			this.setCustomName(nbt.getString("CustomeName"));
@@ -297,44 +252,39 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 	}
 	
 	private boolean canCrush() {
-		if (this.inventory[0] == null) {
+		if (this.stacks.get(0).isEmpty()) {
 			return false;
 		} else{
-			ItemStack stack = OreCrusherRecipes.instance().getReslut(this.inventory[0]);
-			if (stack == null) return false;
-			if (this.inventory[1] == null) return true;
-			if (this.inventory[2] == null) return true;
-			if ((!this.inventory[1].isItemEqual(stack) || this.inventory[1].getMetadata() != stack.getMetadata()) && !(this.inventory[2].isItemEqual(stack) || this.inventory[2].getMetadata() == stack.getMetadata())) {return false;}
-			if (this.inventory[2].isItemEqual(stack) || this.inventory[2].getMetadata() == stack.getMetadata()) {
-				if (!this.inventory[2].isItemEqual(stack) || this.inventory[2].getMetadata() != stack.getMetadata()) return false;
-				int result = this.inventory[2].getCount() + stack.getCount();
-				return result <= this.getInventoryStackLimit() && result <= this.inventory[2].getMaxStackSize();
+			ItemStack stack = OreCrusherRecipes.instance().getReslut(this.stacks.get(0));
+			if (stack.isEmpty()) return false;
+			if (this.stacks.get(1).isEmpty()) return true;
+			if (this.stacks.get(2).isEmpty()) return true;
+			if ((!this.stacks.get(1).isItemEqual(stack) || this.stacks.get(1).getMetadata() != stack.getMetadata()) && !(this.stacks.get(2).isItemEqual(stack) || this.stacks.get(2).getMetadata() == stack.getMetadata())) {return false;}
+			if (this.stacks.get(2).isItemEqual(stack) || this.stacks.get(2).getMetadata() == stack.getMetadata()) {
+				if (!this.stacks.get(2).isItemEqual(stack) || this.stacks.get(2).getMetadata() != stack.getMetadata()) return false;
+				int result = this.stacks.get(2).getCount() + stack.getCount();
+				return result <= this.getInventoryStackLimit() && result <= this.stacks.get(2).getMaxStackSize();
 			}
-			int result = this.inventory[1].getCount() + stack.getCount();
-			return result <= this.getInventoryStackLimit() && result <= this.inventory[1].getMaxStackSize();
+			int result = this.stacks.get(1).getCount() + stack.getCount();
+			return result <= this.getInventoryStackLimit() && result <= this.stacks.get(1).getMaxStackSize();
 		}
 	}
 	
 	public void crushItem() {
 		if (this.canCrush()) {
-			ItemStack stack = OreCrusherRecipes.instance().getReslut(this.inventory[0]);
+			ItemStack stack = OreCrusherRecipes.instance().getReslut(this.stacks.get(0));
 			
-			if (this.inventory[1] == null) {
-				this.inventory[1] = stack.copy();
-			} else if (this.inventory[1].getItem() == stack.getItem() && this.inventory[1].getMetadata() == stack.getMetadata() && !(this.inventory[1].getCount() == this.getInventoryStackLimit() || this.inventory[1].getMaxStackSize() == this.inventory[1].getCount())) {
-//				this.inventory[1].stackSize += stack.stackSize;
-				this.inventory[1].setCount(this.inventory[1].getCount() + stack.getCount());
-			} else if (this.inventory[2] == null) {
-				this.inventory[2] = stack.copy();
-			} else if (this.inventory[2].getItem() == stack.getItem() && this.inventory[2].getMetadata() == stack.getMetadata()) {
-//				this.inventory[2].stackSize += stack.stackSize;
-				this.inventory[1].setCount(this.inventory[1].getCount() + stack.getCount());
+			if (this.stacks.get(1).isEmpty()) {
+				this.stacks.set(1, stack.copy());
+			} else if (this.stacks.get(1).getItem() == stack.getItem() && this.stacks.get(1).getMetadata() == stack.getMetadata() && !(this.stacks.get(1).getCount() == this.getInventoryStackLimit() || this.stacks.get(1).getMaxStackSize() == this.stacks.get(1).getCount())) {
+				this.stacks.get(1).grow(stack.getCount());
+			} else if (this.stacks.get(2).isEmpty()) {
+				this.stacks.set(2, stack.copy());
+			} else if (this.stacks.get(2).getItem() == stack.getItem() && this.stacks.get(2).getMetadata() == stack.getMetadata()) {
+				this.stacks.get(2).grow(stack.getCount());
 			}
 			
-			this.inventory[0].setCount(this.inventory[0].getCount() - 1);;
-			if (this.inventory[0].getCount() <= 0) {
-				this.inventory[0] = null;
-			}
+			this.stacks.get(0).shrink(1);
 		}
 	}
 	

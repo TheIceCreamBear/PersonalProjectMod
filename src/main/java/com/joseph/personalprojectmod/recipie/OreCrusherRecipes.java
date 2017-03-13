@@ -46,7 +46,7 @@ public class OreCrusherRecipes {
 				return (ItemStack)entry.getValue();
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 	private boolean compareItemStacks(ItemStack stack1, ItemStack stack2) {

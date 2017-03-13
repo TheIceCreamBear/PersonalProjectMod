@@ -136,9 +136,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	
 	@Override
 	public ItemStack getStackInSlot(int index) {
-//		if (index < 0 || index >= this.getSizeInventory())
-//	        return null;
-//	    return this.inventory[index];
 	    return (ItemStack)this.furnactItemStacks.get(index);
 	}
 
@@ -156,12 +153,12 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		ItemStack itemStack = (ItemStack)this.furnactItemStacks.get(index);
 		boolean flag = stack != null && stack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(stack, itemStack);
-        this.furnactItemStacks.set(index, stack);
 
         if (stack.getCount() > this.getInventoryStackLimit()) {
             stack.setCount(this.getInventoryStackLimit());
         }
 
+        this.furnactItemStacks.set(index, stack);
         if (index == 0 && !flag) {
             this.totalCookTimeOne = this.getCookTime(stack);
             this.cookTimeOne = 0;

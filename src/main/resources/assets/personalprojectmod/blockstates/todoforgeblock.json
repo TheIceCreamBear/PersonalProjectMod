@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "personalprojectmod:todoforge" },
+        "facing=south": { "model": "personalprojectmod:todoforge", "y": 180 },
+        "facing=west": { "model": "personalprojectmod:todoforge", "y": 270 },
+        "facing=east": { "model": "personalprojectmod:todoforge", "y": 90 }
+    }
+}

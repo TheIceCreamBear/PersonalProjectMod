@@ -98,16 +98,16 @@ public class ContainerTEOreCrusher extends Container {
 
 	        if (fromSlot == 1 || fromSlot == 2) {
 	        	if (!this.mergeItemStack(current, 3, 39, true))
-	        		return null;
+	        		return ItemStack.EMPTY;
 	        	slot.onSlotChange(current, previous);
 	        } else if (fromSlot != 0) {
-	        	if (OreCrusherRecipes.instance().getReslut(current) != null) {
+	        	if (!OreCrusherRecipes.instance().getReslut(current).isEmpty()) {
 	        		if (!this.mergeItemStack(current, 0, 1, false)) {
-	        			return null;
+	        			return ItemStack.EMPTY;
 	        		}
 	        	}
 	        } else if (!this.mergeItemStack(current, 3, 39, false)) {
-	        	return null;
+	        	return ItemStack.EMPTY;
 	        }
 
 	        if (current.getCount() == 0)
@@ -116,7 +116,7 @@ public class ContainerTEOreCrusher extends Container {
 	            slot.onSlotChanged();
 
 	        if (current.getCount() == previous.getCount())
-	            return null;
+	            return ItemStack.EMPTY;
 	        slot.onTake(playerIn, current);
 	    }
 	    return previous;

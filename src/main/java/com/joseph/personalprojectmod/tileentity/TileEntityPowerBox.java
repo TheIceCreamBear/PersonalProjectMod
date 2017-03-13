@@ -11,17 +11,19 @@ package com.joseph.personalprojectmod.tileentity;
 //import ic2.api.item.ElectricItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class TileEntityPowerBox extends TileEntity  implements ITickable, IInventory/*, IEnergySink, IEnergySource */ {
-	private ItemStack[] inventory;
+	private NonNullList<ItemStack> stacks = NonNullList.withSize(2, ItemStack.EMPTY);
 	private String customName;
 	
 	// Energy Stuff
@@ -35,7 +37,6 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 	// End Energy
 	
 	public TileEntityPowerBox() {
-		this.inventory = new ItemStack[this.getSizeInventory()];
 //		this.power = EnergyNet.instance.getPowerFromTier(this.tier);
 		this.capacity = 1000000;
 	}
@@ -59,10 +60,8 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		
 		// Server
 		if (!this.world.isRemote) {
-//			LogHelper.info(this.energyStored + "/" + this.capacity);
 			if (!this.addedToENet) {
 //				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-				
 				this.addedToENet = true;
 			}
 			
@@ -96,8 +95,12 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		for (ItemStack iStack : stacks) {
+			if (!iStack.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
@@ -107,44 +110,17 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 	
 	@Override
 	public ItemStack getStackInSlot(int index) {
-		if (index < 0 || index >= this.getSizeInventory())
-	        return null;
-	    return this.inventory[index];
+	    return (ItemStack)this.stacks.get(index);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if (this.getStackInSlot(index) != null) {
-			ItemStack itemstack;
-
-			if (this.getStackInSlot(index).getCount() <= count) {
-				itemstack = this.getStackInSlot(index);
-				this.setInventorySlotContents(index, null);
-				this.markDirty();
-				return itemstack;
-			} else {
-				itemstack = this.getStackInSlot(index).splitStack(count);
-
-				if (this.getStackInSlot(index).getCount() <= 0) {
-					this.setInventorySlotContents(index, null);
-				} else {
-					// Just to show that changes happened
-					this.setInventorySlotContents(index, this.getStackInSlot(index));
-				}
-
-				this.markDirty();
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
+		return ItemStackHelper.getAndSplit(stacks, index, count);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		ItemStack stack = this.getStackInSlot(index);
-	    this.setInventorySlotContents(index, null);
-	    return stack;
+		return ItemStackHelper.getAndRemove(stacks, index);
 	}
 
 	@Override
@@ -152,13 +128,10 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		if (index < 0 || index >= this.getSizeInventory())
 	        return;
 
-	    if (stack != null && stack.getCount() > this.getInventoryStackLimit())
+	    if (stack.getCount() > this.getInventoryStackLimit())
 	        stack.setCount(this.getInventoryStackLimit());
 	        
-	    if (stack != null && stack.getCount() == 0)
-	        stack = null;
-
-	    this.inventory[index] = stack;
+	    this.stacks.set(index, stack);
 	    this.markDirty();
 	}
 
@@ -211,9 +184,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < this.getSizeInventory(); i++) {
-			this.setInventorySlotContents(i, null);
-		}
+		this.stacks.clear();
 	}
 	
 	@Override
@@ -223,16 +194,7 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		nbt.setDouble("EnergyStored", this.energyStored);
 		nbt.setDouble("Capacity", this.capacity);
 		
-		NBTTagList list = new NBTTagList();
-		for (int i = 0; i < this.getSizeInventory(); i++) {
-			if (this.getStackInSlot(i) != null) {
-				NBTTagCompound stackTag = new NBTTagCompound();
-				stackTag.setByte("Slot", (byte)i);
-				this.getStackInSlot(i).writeToNBT(stackTag);
-				list.appendTag(stackTag);
-			}
-		}
-		nbt.setTag("Items", list);
+		ItemStackHelper.saveAllItems(nbt, stacks);
 		
 		if (this.hasCustomName()) {
 			nbt.setString("CustomeName", this.getCustomName());
@@ -250,12 +212,8 @@ public class TileEntityPowerBox extends TileEntity  implements ITickable, IInven
 		this.energyStored = nbt.getDouble("EnergyStored");
 		this.capacity = nbt.getDouble("Capacity");
 		
-		NBTTagList list = nbt.getTagList("Items", 10);
-		for (int i = 0; i < list.tagCount(); i++) {
-			NBTTagCompound stackTag = list.getCompoundTagAt(i);
-			int slot = stackTag.getByte("Slot") & 255;
-			this.setInventorySlotContents(slot, new ItemStack(stackTag));
-		}
+		this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+		ItemStackHelper.loadAllItems(nbt, stacks);
 		
 		if (nbt.hasKey("CustomName", 8)) {
 			this.setCustomName(nbt.getString("CustomeName"));

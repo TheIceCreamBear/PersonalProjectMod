@@ -95,12 +95,12 @@ public class ContainerTEElectricGenerator extends Container {
 	        if (fromSlot != 0) {
 	        	if (TileEntityElectricGenerator.isItemFuel(current)) {
 	        		if (!this.mergeItemStack(current, 0, 1, false)) {
-	        			return null;
+	        			return ItemStack.EMPTY;
 	        		}
 	        	}
 	        } else {
 	        	if (!this.mergeItemStack(current, 1, 36, false)) {
-	        		return null;
+	        		return ItemStack.EMPTY;
 	        	}
 	        }
 
@@ -110,7 +110,7 @@ public class ContainerTEElectricGenerator extends Container {
 	            slot.onSlotChanged();
 
 	        if (current.getCount() == previous.getCount())
-	            return null;
+	            return ItemStack.EMPTY;
 	        slot.onTake(playerIn, current);
 	    }
 	    return previous;

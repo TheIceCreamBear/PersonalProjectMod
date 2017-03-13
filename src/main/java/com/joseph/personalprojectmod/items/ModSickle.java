@@ -52,11 +52,7 @@ public class ModSickle extends ItemTool {
 		IBlockState blockstate = world.getBlockState(pos);
 		Block block = blockstate.getBlock();
 		if (EFFECTIVE_ON.contains(block)) {
-//			block.breakBlock(world, pos, blockstate);
-//			List<ItemStack> drops = block.getDrops(world, pos, blockstate, 2);
 			world.destroyBlock(pos, true);
-//			world.playSound((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f, true);
-//			world.setBlockState(pos, airState, 11);
 			return true;
 		}
 		return false;
