@@ -60,7 +60,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
     	if (!this.world.isRemote) {
 //    		if (!this.addedToENet) {MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this)); this.addedToENet = true;}
 			if (this.canCrush()) {
-				if (this.useEnergy(4)) {
+//				if (this.useEnergy(4)) {
 					this.crushTime++;
 					
 					if (this.crushTime == this.totalCrushTime) {
@@ -69,7 +69,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 						this.crushItem();
 						isDirty = true;
 					}
-				}
+//				}
 			} else {
 				this.crushTime = 0;
 			}

@@ -59,7 +59,7 @@ public final class ModItems {
 		blueStonePickaxe = new ModPickaxe(BLUE_STONE, EnumItems.BLUE_STONE_PICKAXE.getUnlocalizedName(), EnumItems.BLUE_STONE_PICKAXE.getRegistryName());
 		blueStoneAxe = new ModAxe(BLUE_STONE, EnumItems.BLUE_STONE_AXE.getUnlocalizedName(), EnumItems.BLUE_STONE_AXE.getRegistryName());
 		blueStoneHoe = new ModHoe(BLUE_STONE, EnumItems.BLUE_STONE_HOE.getUnlocalizedName(), EnumItems.BLUE_STONE_HOE.getRegistryName());
-		blueStoneSpade = new ModSpade(BLUE_STONE, EnumItems.BLUE_STONE_SPADE.getUnlocalizedName(), EnumItems.BLUE_STONE_SPADE.getRegistryName(), 13.0f);
+		blueStoneSpade = new ModSpade(BLUE_STONE, EnumItems.BLUE_STONE_SPADE.getUnlocalizedName(), EnumItems.BLUE_STONE_SPADE.getRegistryName(), 10.0f);
 		blueStoneSword = new ModSword(BLUE_STONE, EnumItems.BLUE_STONE_SWORD.getUnlocalizedName(), EnumItems.BLUE_STONE_SWORD.getRegistryName());
 		BLUESTONESICKLE = new ModSickle(BLUE_STONE, EnumItems.BLUE_STONE_SICKLE.getUnlocalizedName(), EnumItems.BLUE_STONE_SICKLE.getRegistryName());
 		

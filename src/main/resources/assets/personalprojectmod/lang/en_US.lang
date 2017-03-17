@@ -30,7 +30,7 @@ tile.teelegenerator.name=Electric Generator
 tile.tepowerbox.name=Power Storage Box
 
 # Ores
-tile.bluStnOre.name=BlueStone Ore
+tile.blustnore.name=BlueStone Ore
 
 # GUIs
 container.personalprojectmod:ore_crusher=Ore Crusher

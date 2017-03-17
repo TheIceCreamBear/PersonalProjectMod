@@ -46,8 +46,8 @@ public class ModArmor extends ItemArmor {
 	}
 	
 	private void effectPlayer(EntityPlayer player, Potion potion, int amplifier) {
-		if (player.getActivePotionEffect(potion) == null || player.getActivePotionEffect(potion).getDuration() <= 1) {
-			player.addPotionEffect(new PotionEffect(potion, 159, amplifier, true, true));
+		if (player.getActivePotionEffect(potion) == null || player.getActivePotionEffect(potion).getDuration() <= 200) {
+			player.addPotionEffect(new PotionEffect(potion, 1600, amplifier, true, true));
 		}
 	}
 	

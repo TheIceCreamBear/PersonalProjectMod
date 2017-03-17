@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-// TODO s, turets that shoot stuff, entities of some kind, sycle, compressed furnace
+// TODO s, turets that shoot stuff, entities of some kind, 3x3 stone miner/pickaxe
 
 /**
  * 
