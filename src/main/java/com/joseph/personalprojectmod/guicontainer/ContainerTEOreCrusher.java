@@ -111,7 +111,7 @@ public class ContainerTEOreCrusher extends Container {
 	        }
 
 	        if (current.getCount() == 0)
-	            slot.putStack((ItemStack) null);
+	            slot.putStack(ItemStack.EMPTY);
 	        else
 	            slot.onSlotChanged();
 

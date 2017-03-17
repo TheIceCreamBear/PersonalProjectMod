@@ -13,8 +13,8 @@ public enum EnumBlocks {
 	private String registryName;
 	
 	EnumBlocks(String unlocalizedName, String registryName) {
-		this.unlocalizedName = unlocalizedName;
-		this.registryName = registryName;
+		this.unlocalizedName = unlocalizedName.toLowerCase();
+		this.registryName = registryName.toLowerCase();
 	}
 	
 	public String getUnlocalizedName() {

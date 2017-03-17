@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 /**
  * 
  * @author Joseph Terribile
- * @version 1.8.9-1.0.0
+ * @version 1.11.2-1.0.0
  */
 @Mod(modid = Refrence.MOD_ID, name = Refrence.MOD_NAME, version = Refrence.VERSION, guiFactory = Refrence.GUI_FACTORY_CLASS)
 public class PersonalProject {

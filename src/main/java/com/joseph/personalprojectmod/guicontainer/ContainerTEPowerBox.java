@@ -84,7 +84,7 @@ public class ContainerTEPowerBox extends Container {
 	        // [...] Custom behavior
 
 	        if (current.getCount() == 0)
-	            slot.putStack((ItemStack) null);
+	            slot.putStack(ItemStack.EMPTY);
 	        else
 	            slot.onSlotChanged();
 
