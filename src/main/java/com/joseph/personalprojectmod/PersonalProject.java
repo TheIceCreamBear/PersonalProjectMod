@@ -80,4 +80,6 @@ public class PersonalProject {
 		
 		LogHelper.info("Post Init Complete");
 	}
+	
+	// --username jterribile@hotmail.com --password bobby14
 }

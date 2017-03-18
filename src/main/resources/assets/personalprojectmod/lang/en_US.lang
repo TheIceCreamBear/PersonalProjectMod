@@ -3,6 +3,7 @@ itemGroup.personalprojectmod=Personal Project Mod
 
 # Items
 item.blu_apple.name=Blueden Apple
+item.id_card.name=ID Card
 
 # Dusts
 item.blue_stone_dust.name=BlueStone Dust
@@ -18,6 +19,7 @@ item.blue_stone_spade.name=BlueStone Shovel
 item.blue_stone_sword.name=BlueSotne Sword
 
 # Blocks
+tile.explodo_block.name=Explodo Block
 
 # Tile Entities
 tile.te_ore_crusher.name=Ore Crusher

@@ -14,11 +14,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockRenderRegister {
 	@SideOnly(Side.CLIENT)
 	public static void registerBlockRender() {
+		// ORES
 		reg(ModBlocks.blueStoneOre);
+		
+		// GENERIC
+		reg(ModBlocks.explodo);
+		
+		// TILE ENTITES
 		reg(ModBlocks.teOreCrusher);
 		reg(ModBlocks.teEleFurnace);
 		reg(ModBlocks.teEleGenerator);
 		reg(ModBlocks.tePowerBox);
+		
 	}
 	
 	public static void reg(Block blk) {

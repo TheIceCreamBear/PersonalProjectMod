@@ -1,6 +1,7 @@
 package com.joseph.personalprojectmod.init;
 
 import com.joseph.personalprojectmod.items.BasicItem;
+import com.joseph.personalprojectmod.items.ItemIDCard;
 import com.joseph.personalprojectmod.items.ModArmor;
 import com.joseph.personalprojectmod.items.ModAxe;
 import com.joseph.personalprojectmod.items.ModFood;
@@ -39,6 +40,7 @@ public final class ModItems {
 	public static Item blueStoneIngot = new BasicItem("blue_stone_ingot");
 	public static Item blueStoneDust = new BasicItem("blue_stone_dust");
 	public static Item blueApple = new ModFood("blu_apple", 6, 1.5f, false, new PotionEffect(Potion.regeneration.id, 100, 0));
+	public static Item idCardRef = new ItemIDCard("id_card");
 	
 	
 	// SELF NOTE: WHEN EVER A NEW ITEM IS ADDED, IT NEEDS TO BE REISTERED IN ItemRenderRegister
@@ -47,6 +49,7 @@ public final class ModItems {
 		GameRegistry.registerItem(blueStoneIngot, "blue_stone_ingot");
 		GameRegistry.registerItem(blueStoneDust, "blue_stone_dust");
 		GameRegistry.registerItem(blueApple, "blu_apple");
+		GameRegistry.registerItem(idCardRef, "id_card");
 		
 		// Tools
 		GameRegistry.registerItem(blueStoneSpade, "blue_stone_spade");
@@ -54,7 +57,7 @@ public final class ModItems {
 		GameRegistry.registerItem(blueStoneAxe, "blue_stone_axe");
 		GameRegistry.registerItem(blueStoneHoe, "blue_stone_hoe");
 		GameRegistry.registerItem(blueStoneSword, "blue_stone_sword");
-		
+		                         
 		// Armor
 		GameRegistry.registerItem(blueStoneHelmet, "blue_stone_helmet");
 		GameRegistry.registerItem(blueStoneChestplate, "blue_stone_chestplate");

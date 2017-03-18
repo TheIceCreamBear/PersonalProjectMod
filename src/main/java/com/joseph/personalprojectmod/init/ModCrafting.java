@@ -1,5 +1,7 @@
 package com.joseph.personalprojectmod.init;
 
+import com.joseph.personalprojectmod.items.ItemIDCard;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -25,6 +27,7 @@ public class ModCrafting {
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.teOreCrusher)), new Object[] {"###", "#I#", "#$#", '#', Items.iron_ingot, 'I', Items.redstone, '$', ModItems.blueStoneIngot});
 		GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.teEleFurnace)), new Object[] {"###", "#F#", "#R#", '#', Items.iron_ingot, 'F', Item.getItemFromBlock(Blocks.furnace), 'R', Item.getItemFromBlock(Blocks.redstone_block)});
 		GameRegistry.addRecipe(new ItemStack(ModItems.blueApple), new Object[] {"###", "#I#", "###", '#', ModItems.blueStoneIngot, 'I', Items.apple});
+		GameRegistry.addRecipe(new ItemStack(ModItems.idCardRef), new Object[] {"PPP", "R$R", "PPP", 'P', Items.paper, 'R', Items.redstone, '$', ModItems.blueStoneIngot});
 		
 	}
 }
