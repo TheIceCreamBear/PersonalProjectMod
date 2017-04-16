@@ -123,6 +123,4 @@ public class BlockTODOForgeTMPCLASS extends Block {
 //		return BlockRenderLayer.TRANSLUCENT;
 		return BlockRenderLayer.CUTOUT;
 	}
-	
-	
 }

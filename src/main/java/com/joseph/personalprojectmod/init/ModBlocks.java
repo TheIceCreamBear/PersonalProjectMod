@@ -1,5 +1,6 @@
 package com.joseph.personalprojectmod.init;
 
+import com.joseph.personalprojectmod.blocks.BlockInstantTNT;
 import com.joseph.personalprojectmod.blocks.BlockTEElectricFurnace;
 import com.joseph.personalprojectmod.blocks.BlockTEElectricGenerator;
 import com.joseph.personalprojectmod.blocks.BlockTEOreCrusher;
@@ -24,6 +25,7 @@ public class ModBlocks {
 	public static Block bluStnOre;
 	public static Block goldenBrickBlock;
 	public static Block todoForge;
+	public static Block instantTNT;
 	
 	// TileEntities
 	public static Block teOreCrusher;
@@ -36,6 +38,7 @@ public class ModBlocks {
 		bluStnOre = new BlueStoneOre();
 		goldenBrickBlock = new GoldInfusedBrickBlock();
 		todoForge = new BlockTODOForgeTMPCLASS();
+		instantTNT = new BlockInstantTNT();
 		
 		// TileEntities
 		teOreCrusher = new BlockTEOreCrusher();
@@ -50,6 +53,7 @@ public class ModBlocks {
 		regBlock(bluStnOre);
 		regBlock(goldenBrickBlock);
 		regBlock(todoForge);
+		regBlock(instantTNT);
 		
 		// TileEntities
 		regBlock(teEleFurnace);
@@ -78,6 +82,7 @@ public class ModBlocks {
 		regRenderBlock(bluStnOre);
 		regRenderBlock(goldenBrickBlock);
 		regRenderBlock(todoForge);
+		regRenderBlock(instantTNT);
 		
 		// TileEntities
 		regRenderBlock(teEleFurnace);

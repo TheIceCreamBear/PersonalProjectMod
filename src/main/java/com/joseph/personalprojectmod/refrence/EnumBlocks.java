@@ -7,7 +7,8 @@ public enum EnumBlocks {
 	TE_ORE_CRUSHER("teOreCrusher", "BlockTEOreCrusher"),
 	TE_POWER_BOX("tePowerBox", "BlockTEPowerBox"),
 	GOLD_BRICK("goldenbrickblock", "GoldInfusedBrickBlock"),
-	TODO_FORGE("todoforget", "TodoForgeBlock")
+	TODO_FORGE("todoforget", "TodoForgeBlock"),
+	INSTANT_TNT("instanttnt", "BlockInstantTNT")
 	;
 	private String unlocalizedName;
 	private String registryName;
