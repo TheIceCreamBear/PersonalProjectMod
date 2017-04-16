@@ -5,8 +5,8 @@ import java.util.Random;
 import com.joseph.personalprojectmod.PersonalProject;
 import com.joseph.personalprojectmod.creativetabs.CreativeTabsPPM;
 import com.joseph.personalprojectmod.init.ModBlocks;
-import com.joseph.personalprojectmod.refrence.EnumBlocks;
-import com.joseph.personalprojectmod.refrence.GuiIDRef;
+import com.joseph.personalprojectmod.reference.EnumBlocks;
+import com.joseph.personalprojectmod.reference.GuiIDRef;
 import com.joseph.personalprojectmod.tileentity.TileEntityPowerBox;
 
 import net.minecraft.block.Block;

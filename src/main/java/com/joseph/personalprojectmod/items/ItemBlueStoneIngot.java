@@ -1,7 +1,7 @@
 package com.joseph.personalprojectmod.items;
 
 import com.joseph.personalprojectmod.creativetabs.CreativeTabsPPM;
-import com.joseph.personalprojectmod.refrence.EnumItems;
+import com.joseph.personalprojectmod.reference.EnumItems;
 
 import net.minecraft.item.Item;
 

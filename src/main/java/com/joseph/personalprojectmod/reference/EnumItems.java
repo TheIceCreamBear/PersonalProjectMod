@@ -1,4 +1,4 @@
-package com.joseph.personalprojectmod.refrence;
+package com.joseph.personalprojectmod.reference;
 
 public enum EnumItems {
 	BLUE_STONE_INGOT("blueStoneIngot", "ItemBlueStoneIngot"),

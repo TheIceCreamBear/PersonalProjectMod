@@ -1,7 +1,7 @@
 package com.joseph.personalprojectmod.blocks;
 
 import com.joseph.personalprojectmod.creativetabs.CreativeTabsPPM;
-import com.joseph.personalprojectmod.refrence.EnumBlocks;
+import com.joseph.personalprojectmod.reference.EnumBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;

@@ -8,7 +8,7 @@ import com.joseph.personalprojectmod.init.ModItems;
 import com.joseph.personalprojectmod.init.ModTileEntities;
 import com.joseph.personalprojectmod.proxy.IProxy;
 import com.joseph.personalprojectmod.recipie.OreCrusherRecipes;
-import com.joseph.personalprojectmod.refrence.Refrence;
+import com.joseph.personalprojectmod.reference.Reference;
 import com.joseph.personalprojectmod.util.LogHelper;
 import com.joseph.personalprojectmod.util.OreDictLocalReg;
 import com.joseph.personalprojectmod.world.BasicWorldGen;
@@ -29,13 +29,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * @author Joseph Terribile
  * @version 1.11.2-1.0.0
  */
-@Mod(modid = Refrence.MOD_ID, name = Refrence.MOD_NAME, version = Refrence.VERSION, guiFactory = Refrence.GUI_FACTORY_CLASS)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
 public class PersonalProject {
 	
 	@Mod.Instance
 	public static PersonalProject instance;
 	
-	@SidedProxy(clientSide = Refrence.CLIENT_PROXY, serverSide = Refrence.SERVER_PROXY)
+	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY)
 	public static IProxy proxy;
 	
 	@Mod.EventHandler

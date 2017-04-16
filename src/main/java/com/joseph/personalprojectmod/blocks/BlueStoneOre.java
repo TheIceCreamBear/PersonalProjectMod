@@ -2,7 +2,7 @@ package com.joseph.personalprojectmod.blocks;
 
 import java.util.Random;
 
-import com.joseph.personalprojectmod.refrence.EnumBlocks;
+import com.joseph.personalprojectmod.reference.EnumBlocks;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

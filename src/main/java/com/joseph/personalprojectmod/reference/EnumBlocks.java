@@ -1,4 +1,4 @@
-package com.joseph.personalprojectmod.refrence;
+package com.joseph.personalprojectmod.reference;
 
 public enum EnumBlocks {
 	BLUE_STONE_ORE("bluStnOre", "BlueStoneOre"),

@@ -8,7 +8,7 @@ import com.joseph.personalprojectmod.guicontainer.ContainerTEElectricFurnace;
 import com.joseph.personalprojectmod.guicontainer.ContainerTEElectricGenerator;
 import com.joseph.personalprojectmod.guicontainer.ContainerTEOreCrusher;
 import com.joseph.personalprojectmod.guicontainer.ContainerTEPowerBox;
-import com.joseph.personalprojectmod.refrence.GuiIDRef;
+import com.joseph.personalprojectmod.reference.GuiIDRef;
 import com.joseph.personalprojectmod.tileentity.TileEntityElectricFurnace;
 import com.joseph.personalprojectmod.tileentity.TileEntityElectricGenerator;
 import com.joseph.personalprojectmod.tileentity.TileEntityOreCrusher;

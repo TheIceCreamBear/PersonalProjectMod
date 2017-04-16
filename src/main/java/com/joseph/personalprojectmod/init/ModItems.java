@@ -10,7 +10,7 @@ import com.joseph.personalprojectmod.items.ModPickaxe;
 import com.joseph.personalprojectmod.items.ModSickle;
 import com.joseph.personalprojectmod.items.ModSpade;
 import com.joseph.personalprojectmod.items.ModSword;
-import com.joseph.personalprojectmod.refrence.EnumItems;
+import com.joseph.personalprojectmod.reference.EnumItems;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -33,7 +33,7 @@ public final class ModItems {
 	public static Item blueStoneHoe;
 	public static Item blueStoneSpade;
 	public static Item blueStoneSword;
-	public static Item BLUESTONESICKLE;
+	public static Item blueStoneSickle;
 	
 	// Armor
 	public static Item blueStoneHelmet;
@@ -61,7 +61,7 @@ public final class ModItems {
 		blueStoneHoe = new ModHoe(BLUE_STONE, EnumItems.BLUE_STONE_HOE.getUnlocalizedName(), EnumItems.BLUE_STONE_HOE.getRegistryName());
 		blueStoneSpade = new ModSpade(BLUE_STONE, EnumItems.BLUE_STONE_SPADE.getUnlocalizedName(), EnumItems.BLUE_STONE_SPADE.getRegistryName(), 10.0f);
 		blueStoneSword = new ModSword(BLUE_STONE, EnumItems.BLUE_STONE_SWORD.getUnlocalizedName(), EnumItems.BLUE_STONE_SWORD.getRegistryName());
-		BLUESTONESICKLE = new ModSickle(BLUE_STONE, EnumItems.BLUE_STONE_SICKLE.getUnlocalizedName(), EnumItems.BLUE_STONE_SICKLE.getRegistryName());
+		blueStoneSickle = new ModSickle(BLUE_STONE, EnumItems.BLUE_STONE_SICKLE.getUnlocalizedName(), EnumItems.BLUE_STONE_SICKLE.getRegistryName());
 		
 		// Armor
 		blueStoneHelmet = new ModArmor(EnumItems.BLUE_STONE_HELMET.getUnlocalizedName(), EnumItems.BLUE_STONE_HELMET.getRegistryName(), BLUE_STONE_ARMOR, 1, EntityEquipmentSlot.HEAD);
@@ -83,7 +83,7 @@ public final class ModItems {
 		GameRegistry.register(blueStoneHoe);
 		GameRegistry.register(blueStoneSpade);
 		GameRegistry.register(blueStoneSword);
-		GameRegistry.register(BLUESTONESICKLE);
+		GameRegistry.register(blueStoneSickle);
 		
 		// Armor
 		GameRegistry.register(blueStoneHelmet);
@@ -104,7 +104,7 @@ public final class ModItems {
 		regRenderItem(blueStoneHoe);
 		regRenderItem(blueStoneSpade);
 		regRenderItem(blueStoneSword);
-		regRenderItem(BLUESTONESICKLE);
+		regRenderItem(blueStoneSickle);
 		
 		// Armor
 		regRenderItem(blueStoneHelmet);

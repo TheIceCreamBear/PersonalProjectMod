@@ -2,7 +2,7 @@ package com.joseph.personalprojectmod.items;
 
 import com.joseph.personalprojectmod.creativetabs.CreativeTabsPPM;
 import com.joseph.personalprojectmod.init.ModItems;
-import com.joseph.personalprojectmod.refrence.ConfigRef;
+import com.joseph.personalprojectmod.reference.ConfigRef;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;

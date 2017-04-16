@@ -1,6 +1,6 @@
-package com.joseph.personalprojectmod.refrence;
+package com.joseph.personalprojectmod.reference;
 
-public class Refrence {
+public class Reference {
 	public static final String MOD_ID = "personalprojectmod";
 	public static final String MOD_NAME = "Personal Project Mod";
 	// Version convention is minecraft_version-mod_version

@@ -13,6 +13,7 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.joseph.personalprojectmod.reference.ConfigRef;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -34,7 +35,6 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class PPMExplosion extends Explosion {
-	/** The type of Flan's Mod weapon that caused this explosion */
 	private double x, y, z;
 	private float radius;
 	private World world;
@@ -47,15 +47,14 @@ public class PPMExplosion extends Explosion {
 	/** whether or not this explosion spawns smoke particles */
 	private final boolean isSmoking;
 	private final Random explosionRNG;
-	private final Map playerMap;
+	private final Map<EntityPlayer, Vec3d> playerMap;
 	private boolean breaksBlocks;
-	private PrintWriter pw;
 	
 	public PPMExplosion(World world, Entity entity, EntityPlayer detonator, double x, double y, double z, float radius, boolean flaming, boolean smoking, boolean breaksBlocks) {
 		super(world, entity, x, y, z, radius, flaming, smoking);
 		this.explosionRNG = new Random();
-		this.affectedBlockPositions = Lists.newArrayList();
-		this.playerMap = Maps.newHashMap();
+		this.affectedBlockPositions = Lists.<BlockPos>newArrayList();
+		this.playerMap = Maps.<EntityPlayer, Vec3d>newHashMap();
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -63,22 +62,13 @@ public class PPMExplosion extends Explosion {
 		this.world = world;
 		this.explosive = entity;
 		this.detonator = detonator;
-		this.affectedBlockPositions = Lists.newArrayList();
 		this.isFlaming = flaming;
 		this.isSmoking = true;
 		this.breaksBlocks = breaksBlocks;
 		this.position = new Vec3d(x, y, z);
-		try {
-			pw = new PrintWriter(new FileWriter(new File("C:/Users/Joseph/Desktop/txt.txt")), true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 		if (!net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, this)) {
 			this.doExplosionA();
-			for (BlockPos object : affectedBlockPositions) {
-//				pw.println(object);
-			}
 			this.doExplosionB(true);
 		}
 	}
@@ -89,7 +79,7 @@ public class PPMExplosion extends Explosion {
 		HashSet hashset = Sets.newHashSet();
 		boolean flag = true;
 		
-		float r = radius * radius;		
+		float r = radius * radius;
 		int i = (int) r + 1;
 		
 		for (int j = -i; j < i; ++j) {
@@ -149,7 +139,7 @@ public class PPMExplosion extends Explosion {
 						d9 /= d13;
 						double d14 = (double) this.world.getBlockDensity(vec3, entity.getEntityBoundingBox());
 						double d10 = (1.0D - d12) * d14;
-						entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
+						entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)));
 						double d11 = d10;
 						if (entity instanceof EntityLivingBase) {
 							d11 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10);
@@ -169,7 +159,7 @@ public class PPMExplosion extends Explosion {
 	
 	/** Second part of the explosion (sound, particles, drop spawn) */
 	public void doExplosionB(boolean p_77279_1_) {
-		this.world.playSound((EntityPlayer)null, this.x, this.y, this.z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
+		this.world.playSound((EntityPlayer) null, this.x, this.y, this.z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
 		
 		if (this.isSmoking) {
 			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D, new int[0]);
@@ -208,10 +198,11 @@ public class PPMExplosion extends Explosion {
 				}
 				
 				if (block.getMaterial(null) != Material.AIR) {
-//					if (block.canDropFromExplosion(this)) {
-//						block.dropBlockAsItemWithChance(this.world, blockpos, this.world.getBlockState(blockpos), 1.0F / this.radius, 0);
-//					}
-					
+					if (ConfigRef.explosionDropItem) {
+						if (block.canDropFromExplosion(this)) {
+							block.dropBlockAsItemWithChance(this.world, blockpos, this.world.getBlockState(blockpos), 1.0F / this.radius, 0);
+						}
+					}
 					block.onBlockExploded(this.world, blockpos, this);
 				}
 			}
@@ -231,7 +222,7 @@ public class PPMExplosion extends Explosion {
 	}
 	
 	@Override
-	public Map getPlayerKnockbackMap() {
+	public Map<EntityPlayer, Vec3d> getPlayerKnockbackMap() {
 		return this.playerMap;
 	}
 	
