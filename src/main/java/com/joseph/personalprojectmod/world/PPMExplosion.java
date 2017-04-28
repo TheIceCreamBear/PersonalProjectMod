@@ -197,7 +197,7 @@ public class PPMExplosion extends Explosion {
 					this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
 				}
 				
-				if (block.getMaterial(null) != Material.AIR) {
+				if (this.world.getBlockState(blockpos).getMaterial() != Material.AIR) {
 					if (ConfigRef.explosionDropItem) {
 						if (block.canDropFromExplosion(this)) {
 							block.dropBlockAsItemWithChance(this.world, blockpos, this.world.getBlockState(blockpos), 1.0F / this.radius, 0);
@@ -214,7 +214,7 @@ public class PPMExplosion extends Explosion {
 			while (iterator.hasNext()) {
 				blockpos = (BlockPos) iterator.next();
 				
-				if (this.world.getBlockState(blockpos).getBlock().getMaterial(null) == Material.AIR && this.world.getBlockState(blockpos.down()).getBlock().isFullBlock(null) && this.explosionRNG.nextInt(3) == 0) {
+				if (this.world.getBlockState(blockpos).getMaterial() == Material.AIR && this.world.getBlockState(blockpos.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
 					this.world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
 				}
 			}

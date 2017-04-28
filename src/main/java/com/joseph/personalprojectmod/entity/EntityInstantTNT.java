@@ -63,7 +63,7 @@ public class EntityInstantTNT extends Entity {
 	}
 	
 	private void explode() {
-		float f = 32.0f;
+		float f = 8.0f; // 32.0f is ideal
 //		this.world.createExplosion(this, this.posX, this.posY + (double) (this.height / 16.0F), this.posZ, f, true);
 		new PPMExplosion(world, tntPlacedBy, (EntityPlayer) tntPlacedBy, posX, posY, posZ, f, false, true, true);
 	}

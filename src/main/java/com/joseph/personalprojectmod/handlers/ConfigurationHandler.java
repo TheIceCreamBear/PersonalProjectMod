@@ -28,7 +28,7 @@ public class ConfigurationHandler {
 	
 	private static void loadConfiguration() {
 		ConfigRef.doArmorEffect = configuration.getBoolean("doArmorEffect", Configuration.CATEGORY_GENERAL, true, "Weather or not the armor gives potion effects.");
-		ConfigRef.explosionDropItem = configuration.getBoolean("explosionsDropItems", Configuration.CATEGORY_GENERAL, false, "Weather or not the larger explosives drop the items they explode.");
+		ConfigRef.explosionDropItem = configuration.getBoolean("explosionsDropItems", Configuration.CATEGORY_GENERAL, false, "Weather or not the explosives drop the items they explode.");
 		if (configuration.hasChanged()) {
 			configuration.save();
 		}
