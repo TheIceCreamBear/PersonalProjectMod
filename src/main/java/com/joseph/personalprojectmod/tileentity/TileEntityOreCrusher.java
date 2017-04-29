@@ -1,11 +1,9 @@
 package com.joseph.personalprojectmod.tileentity;
 
+import com.joseph.personalprojectmod.energy.EnergyStorage;
+import com.joseph.personalprojectmod.energy.prefab.IEnergyReceiver;
 import com.joseph.personalprojectmod.recipie.OreCrusherRecipes;
 
-//import ic2.api.energy.event.EnergyTileLoadEvent;
-//import ic2.api.energy.event.EnergyTileUnloadEvent;
-//import ic2.api.energy.tile.IEnergyEmitter;
-//import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -13,30 +11,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
-public class TileEntityOreCrusher extends TileEntity implements ITickable, IInventory/*, IEnergySink */ {
+public class TileEntityOreCrusher extends TileEntity implements ITickable, IInventory, IEnergyReceiver {
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(3, ItemStack.EMPTY);
+	private EnergyStorage storage;
 	private String customName;
 	
 	private int crushTime;
 	private int totalCrushTime;
 	
-	// Power stuff
-	private boolean addedToENet = false;
-	
-	private double energyStored;
-	private double capacity;
-	private int tier = Integer.MAX_VALUE;
-	
-	// End Power Stuff
 	
 	public TileEntityOreCrusher() {
-		this.capacity = 10000;
+		this.storage = new EnergyStorage(10000, 100);
 	}
 	
 	public String getCustomName() {
@@ -58,9 +50,8 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
     		
     	// Server Side
     	if (!this.world.isRemote) {
-//    		if (!this.addedToENet) {MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this)); this.addedToENet = true;}
 			if (this.canCrush()) {
-//				if (this.useEnergy(4)) {
+				if (this.useEnergy(4)) {
 					this.crushTime++;
 					
 					if (this.crushTime == this.totalCrushTime) {
@@ -69,7 +60,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 						this.crushItem();
 						isDirty = true;
 					}
-//				}
+				}
 			} else {
 				this.crushTime = 0;
 			}
@@ -174,8 +165,8 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		switch (id) {
 			case 0: return this.crushTime;
 			case 1: return this.totalCrushTime;
-			case 2: return (int) this.energyStored;
-			case 3: return (int) this.capacity;
+			case 2: return this.storage.getEnergyStored();
+			case 3: return this.storage.getMaxEnergyStored();
 			default: return 0;
 		}
 	}
@@ -185,8 +176,8 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		switch (id) {
 			case 0: this.crushTime = value; break;
 			case 1: this.totalCrushTime = value; break;
-			case 2: this.energyStored = value; break;
-			case 3: this.capacity = value; break;
+			case 2: this.storage.setEnergyStored(value); break;
+			case 3: this.storage.setCapacity(value); break;
 		}
 	}
 
@@ -208,8 +199,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		nbt.setInteger("TotalCrushTime", this.totalCrushTime);
 		
 		// Energy
-		nbt.setDouble("EnergyStored", this.energyStored);
-		nbt.setDouble("Capacity", this.capacity);
+		this.storage.writeToNBT(nbt);
 		// End Energy
 		
 		ItemStackHelper.saveAllItems(nbt, stacks);
@@ -231,8 +221,7 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 		this.totalCrushTime = nbt.getInteger("TotalCrushTime");
 		
 		// Energy
-		this.energyStored = nbt.getDouble("EnergyStored");
-		this.capacity = nbt.getDouble("Capacity");
+		this.storage.readFromNBT(nbt);
 		// End Energy
 		
 		this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
@@ -299,47 +288,39 @@ public class TileEntityOreCrusher extends TileEntity implements ITickable, IInve
 	
 	@Override
 	public void onChunkUnload() {
-		if (this.addedToENet) {
-//			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-			
-			this.addedToENet = false;
-		}
 	}
 	
 	// Energy related things
 	
-//	@Override
-//	public int getSinkTier() {
-//		return Integer.MAX_VALUE; // Allows any tier of power
-//	}
-//	
-//	@Override
-//	public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing direction) {
-//		return true;
-//	}
-//	
-//	@Override
-//	public double getDemandedEnergy() {
-//		return Math.max(0, this.capacity - this.energyStored);
-//	}
-//	
-//	@Override
-//	public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
-//		energyStored += amount;
-//
-//		return 0;
-//	}
-	
-	private boolean canUseEnergy(double amount) {
-		return this.energyStored >= amount;
+	private boolean canUseEnergy(int amount) {
+		return this.storage.extractEnergy(amount, true) > 0;
 	}
 	
-	private boolean useEnergy(double amount) {
+	private boolean useEnergy(int amount) {
 		if (this.canUseEnergy(amount)) {
-			this.energyStored -= amount;
-			
+			this.storage.extractEnergy(amount, false);
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int getEnergyStored(EnumFacing from) {
+		return this.storage.getEnergyStored();
+	}
+
+	@Override
+	public int getMaxEnergyStorable(EnumFacing side) {
+		return this.storage.getMaxEnergyStored();
+	}
+
+	@Override
+	public boolean canConnectEnergy(EnumFacing from) {
+		return true;
+	}
+
+	@Override
+	public int reciveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
+		return this.storage.receiveEnergy(maxReceive, simulate);
 	}
 }

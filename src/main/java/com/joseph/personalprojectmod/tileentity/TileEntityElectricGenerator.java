@@ -1,12 +1,9 @@
 package com.joseph.personalprojectmod.tileentity;
 
 import com.joseph.personalprojectmod.blocks.BlockTEElectricGenerator;
+import com.joseph.personalprojectmod.energy.EnergyStorage;
+import com.joseph.personalprojectmod.energy.prefab.IEnergyProvider;
 
-//import ic2.api.energy.EnergyNet;
-//import ic2.api.energy.event.EnergyTileLoadEvent;
-//import ic2.api.energy.event.EnergyTileUnloadEvent;
-//import ic2.api.energy.tile.IEnergyAcceptor;
-//import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,8 +28,9 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 
-public class TileEntityElectricGenerator extends TileEntity implements ITickable, IInventory/*, IEnergySource */ {
+public class TileEntityElectricGenerator extends TileEntity implements ITickable, IInventory, IEnergyProvider {
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
+	private EnergyStorage stroage;
 	private String customName;
 	
 	// Power Generation stuff
@@ -40,19 +38,8 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	private int maxBurnTime;
 	// End Power Generation
 	
-	// Energy Stuff
-	private boolean addedToENet;
-	
-	private double energyStored;
-	private double capacity;
-	private double power;
-	
-	private int tier = 2;
-	// End Energy Stuff
-	
 	public TileEntityElectricGenerator() {
-		this.capacity = 8000;
-//		this.power = EnergyNet.instance.getPowerFromTier(this.tier);
+		this.stroage = new EnergyStorage(8000, 20);
 	}
 	
 	public String getCustomName() {
@@ -76,15 +63,8 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		if (!this.world.isRemote) {
 //			LogHelper.info(this.getField(0));
 //			LogHelper.info(this.getField(2) + "/" + this.getField(3));
-			if (!this.addedToENet) {
-//				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-				
-				this.addedToENet = true;
-			}
-			
 			if (this.isBruning()) {
 				--this.brunTime;
-				
 			}
 			
 			if (this.isBruning() || !this.stacks.get(0).isEmpty()) {
@@ -92,13 +72,10 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 					this.maxBurnTime = this.brunTime = getItemBurnTime(this.stacks.get(0));
 					if (this.isBruning()) {
 						isDirty = true;
-						
 						if (!this.stacks.get(0).isEmpty()) {
-//							this.inventory[0].stackSize--;
 							this.stacks.get(0).shrink(1);
-							
 							if (this.stacks.get(0).getCount() == 0) {
-								this.stacks.set(0, this.stacks.get(0).getItem().getContainerItem(this.stacks.get(0))); // FOR fluids
+								this.stacks.set(0, this.stacks.get(0).getItem().getContainerItem(this.stacks.get(0))); // FOR FLUIDS
 							}
 						}
 					}
@@ -108,7 +85,6 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 			if (this.isBruning()) {
 				this.addEnergy(20);
 			}
-			
 		}
 		
 		if (isDirty) {
@@ -133,7 +109,12 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	
 	@Override
 	public boolean isEmpty() {
-		return false;
+		for (ItemStack iStack : stacks) {
+			if (!iStack.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
@@ -198,8 +179,8 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		switch (id) {
 			case 0: return this.brunTime;
 			case 1: return this.maxBurnTime;
-			case 2: return (int) this.energyStored;
-			case 3: return (int) this.capacity;
+			case 2: return this.stroage.getEnergyStored();
+			case 3: return this.stroage.getMaxEnergyStored();
 			default: return 0;
 		}
 	}
@@ -209,8 +190,8 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		switch (id) {
 			case 0: this.brunTime = value; break;
 			case 1: this.maxBurnTime = value; break;
-			case 2: this.energyStored = value; break;
-			case 3: this.capacity = value; break;
+			case 2: this.stroage.setEnergyStored(value); break;
+			case 3: this.stroage.setCapacity(value); break;
 			
 		}
 	}
@@ -229,8 +210,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		
-		nbt.setDouble("EnergyStored", this.energyStored);
-		nbt.setDouble("Capacity", this.capacity);
+		this.stroage.writeToNBT(nbt);
 		
 		nbt.setInteger("BurnTime", this.brunTime);
 		nbt.setInteger("MaxBurnTime", this.maxBurnTime);
@@ -240,8 +220,6 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		if (this.hasCustomName()) {
 			nbt.setString("CustomeName", this.getCustomName());
 		}
-		
-		// TODO Add Other Things to this
 		return nbt;
 	}
 	
@@ -249,8 +227,7 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		
-		this.energyStored = nbt.getDouble("EnergyStored");
-		this.capacity = nbt.getDouble("Capacity");
+		this.stroage.readFromNBT(nbt);
 		
 		this.brunTime = nbt.getInteger("BurnTime");
 		this.maxBurnTime = nbt.getInteger("MaxBurnTime");
@@ -261,60 +238,38 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 		if (nbt.hasKey("CustomName", 8)) {
 			this.setCustomName(nbt.getString("CustomeName"));
 		}
-		
-		// TODO Add Other Things to this
 	}
 	
 	@Override
-	public void invalidate() {
-		super.invalidate();
-		
-		this.onChunkUnload();
+	public int getEnergyStored(EnumFacing side) {
+		return this.stroage.getEnergyStored();
 	}
 	
 	@Override
-	public void onChunkUnload() {
-		if (this.addedToENet) {
-//			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-			
-			this.addedToENet = false;
+	public int getMaxEnergyStorable(EnumFacing side) {
+		return this.stroage.getMaxEnergyStored();
+	}
+	
+	@Override
+	public boolean canConnectEnergy(EnumFacing side) {
+		if (!((this.world.getBlockState(this.pos)).getBlock() instanceof BlockTEElectricGenerator)) return false;
+		EnumFacing direction = this.world.getBlockState(this.pos).getValue(BlockTEElectricGenerator.FACING);
+		if (side == direction) {
+			return false;
 		}
+		return true;
 	}
 	
-	// IEnergySource
-//	
-//	@Override
-//	public boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
-//		if (!((this.world.getBlockState(this.pos)).getBlock() instanceof BlockTEElectricGenerator)) return false;
-//		EnumFacing direction = this.world.getBlockState(this.pos).getValue(BlockTEElectricGenerator.FACING);
-//		if (side == direction) {
-//			return false;
-//		}
-//		return true;
-//	}
-//
-//	@Override
-//	public double getOfferedEnergy() {
-//		return Math.min(this.energyStored, this.power);
-//	}
-//
-//	@Override
-//	public void drawEnergy(double amount) {
-//		this.energyStored -= amount;
-//	}
-//
-//	@Override
-//	public int getSourceTier() {
-//		return this.tier;
-//	}
-//	
-	// End IEnergySource
+	@Override
+	public int extractEnergy(EnumFacing side, int maxExtract, boolean simulate) {
+		if (canConnectEnergy(side)) {
+			return this.stroage.extractEnergy(maxExtract, simulate);
+		}
+		return 0;
+	}
 	
-	public double addEnergy(double amount) {
-		if (amount > capacity - energyStored) amount = capacity - energyStored;
-
-		energyStored += amount;
-
+	public int addEnergy(int amount) {
+		stroage.modifyEnergyStored(amount);
 		return amount;
 	}
 	
@@ -323,48 +278,41 @@ public class TileEntityElectricGenerator extends TileEntity implements ITickable
 	}
 	
 	private boolean isBufferFull() {
-		return this.energyStored >= this.capacity;
+		return this.stroage.isFull();
 	}
-	
 	
 	// STATIC METHODS
 	
 	/**
-	 * 
 	 * @param stack - Item to be bruned
 	 * @return The amount of ticks the generator will burn the item
 	 */
 	public static int getItemBurnTime(ItemStack stack) {
-        if (stack == null) {
-            return 0;
-        }
-        else {
-            Item item = stack.getItem();
+        Item item = stack.getItem();
 
-            if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.AIR) {
-                Block block = Block.getBlockFromItem(item);
+        if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.AIR) {
+            Block block = Block.getBlockFromItem(item);
 
-                if (block == Blocks.WOODEN_SLAB) {
-                    return 75;
-                }
-
-                if (block.getMaterial(null) == Material.WOOD) {
-                    return 75;
-                }
-
-                if (block == Blocks.COAL_BLOCK) {
-                    return 4000;
-                }
+            if (block == Blocks.WOODEN_SLAB) {
+                return 75;
             }
 
-            if (item instanceof ItemTool && ((ItemTool)item).getToolMaterialName().equals("WOOD")) return 50;
-            if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD")) return 50;
-            if (item instanceof ItemHoe && ((ItemHoe)item).getMaterialName().equals("WOOD")) return 50;
-            if (item == Items.STICK) return 25;
-            if (item == Item.getItemFromBlock(Blocks.SAPLING)) return 25;
-            if (item == Items.COAL) return 400;
-            return net.minecraftforge.fml.common.registry.GameRegistry.getFuelValue(stack);
+            if (block.getMaterial(null) == Material.WOOD) {
+                return 75;
+            }
+
+            if (block == Blocks.COAL_BLOCK) {
+                return 4000;
+            }
         }
+
+        if (item instanceof ItemTool && ((ItemTool)item).getToolMaterialName().equals("WOOD")) return 50;
+        if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD")) return 50;
+        if (item instanceof ItemHoe && ((ItemHoe)item).getMaterialName().equals("WOOD")) return 50;
+        if (item == Items.STICK) return 25;
+        if (item == Item.getItemFromBlock(Blocks.SAPLING)) return 25;
+        if (item == Items.COAL) return 400;
+        return net.minecraftforge.fml.common.registry.GameRegistry.getFuelValue(stack);
     }
 	
 	public static boolean isItemFuel(ItemStack stack) {

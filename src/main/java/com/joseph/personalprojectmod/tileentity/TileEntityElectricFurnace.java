@@ -1,9 +1,8 @@
 package com.joseph.personalprojectmod.tileentity;
 
-//import ic2.api.energy.event.EnergyTileLoadEvent;
-//import ic2.api.energy.event.EnergyTileUnloadEvent;
-//import ic2.api.energy.tile.IEnergyEmitter;
-//import ic2.api.energy.tile.IEnergySink;
+import com.joseph.personalprojectmod.energy.EnergyStorage;
+import com.joseph.personalprojectmod.energy.prefab.IEnergyReceiver;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -13,14 +12,16 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
-public class TileEntityElectricFurnace extends TileEntity implements ITickable, IInventory/*, IEnergySink*/  {
+public class TileEntityElectricFurnace extends TileEntity implements ITickable, IInventory, IEnergyReceiver  {
 	private NonNullList<ItemStack> furnactItemStacks = NonNullList.<ItemStack>withSize(4, ItemStack.EMPTY);
+	private EnergyStorage storage;
 	private String customName;
 	
 	private int cookTimeOne;
@@ -28,17 +29,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	private int cookTimeTwo;
 	private int totalCookTimeTwo;
 	
-	// Power Stuff
-	private boolean addedToENet = false;
-	
-	private double energyStored;
-	private double capacity;
-	private int tier = Integer.MAX_VALUE;
-	
-	// End Power Stuff
-	
 	public TileEntityElectricFurnace() {
-		this.capacity = 24000;
+		this.storage = new EnergyStorage(24000, 100);
 	}
 	
 	public String getCustomName() {
@@ -60,11 +52,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		
 		// Server Side
 		if (!this.world.isRemote) {
-			
-			if (!this.addedToENet) {
-//				MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-				this.addedToENet = true;
-			}
 			
 			// First slot
 			if (this.canSmelt(0)) {
@@ -204,8 +191,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 			case 1: return this.totalCookTimeOne;
 			case 2: return this.cookTimeTwo;
 			case 3: return this.totalCookTimeTwo;
-			case 4: return (int) this.energyStored;
-			case 5: return (int) this.capacity;
+			case 4: return this.storage.getEnergyStored();
+			case 5: return this.storage.getMaxEnergyStored();
 			default: return 0;
 		}
 	}
@@ -217,8 +204,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 			case 1: this.totalCookTimeOne = value; break;
 			case 2: this.cookTimeTwo = value; break;
 			case 3: this.totalCookTimeTwo = value; break;
-			case 4: this.energyStored = value; break;
-			case 5: this.capacity = value; break;
+			case 4: this.storage.setEnergyStored(value); break;
+			case 5: this.storage.setCapacity(value); break;
 		}
 	}
 
@@ -241,11 +228,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		nbt.setInteger("CookTimeTwo", this.cookTimeTwo);
 		nbt.setInteger("TotalCookTimeTwo", this.totalCookTimeTwo);
 		
-		// Energy
-		nbt.setDouble("EnergyStored", this.energyStored);
-		nbt.setDouble("Capacity", this.capacity);
-		// End Energy
-
+		this.storage.writeToNBT(nbt);
+		
 		ItemStackHelper.saveAllItems(nbt, this.furnactItemStacks);
 		
 		if (this.hasCustomName()) {
@@ -266,10 +250,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		this.cookTimeTwo = nbt.getInteger("CookTimeTwo");
 		this.totalCookTimeTwo = nbt.getInteger("TotalCookTimeTwo");
 		
-		// Energy
-		this.energyStored = nbt.getDouble("EnergyStored");
-		this.capacity = nbt.getDouble("Capacity");
-		// End Energy
+		this.storage.readFromNBT(nbt);
 		
 		this.furnactItemStacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(nbt, furnactItemStacks);
@@ -334,47 +315,39 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	
 	@Override
 	public void onChunkUnload() {
-		if (this.addedToENet) {
-//			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-			
-			this.addedToENet = false;
-		}
 	}
 	
 	// ENERGY RELATED METHODS
 	
-//	@Override
-//	public int getSinkTier() {
-//		return Integer.MAX_VALUE; // ALLOWS ANY TIER
-//	}
-//	
-//	@Override
-//	public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing direction) {
-//		return true;
-//	}
-//	
-//	@Override
-//	public double getDemandedEnergy() {
-//		return Math.max(0, this.capacity - this.energyStored);
-//	}
-//	
-//	@Override
-//	public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
-//		energyStored += amount;
-//
-//		return 0;
-//	}
-	
-	private boolean canUseEnergy(double amount) {
-		return this.energyStored >= amount;
+	private boolean canUseEnergy(int amount) {
+		return this.storage.extractEnergy(amount, true) > 0;
 	}
 	
-	private boolean useEnergy(double amount) {
+	private boolean useEnergy(int amount) {
 		if (this.canUseEnergy(amount)) {
-			this.energyStored -= amount;
-			
+			this.storage.extractEnergy(amount, false);
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int getEnergyStored(EnumFacing from) {
+		return this.storage.getEnergyStored();
+	}
+
+	@Override
+	public int getMaxEnergyStorable(EnumFacing side) {
+		return this.storage.getMaxEnergyStored();
+	}
+
+	@Override
+	public boolean canConnectEnergy(EnumFacing from) {
+		return true;
+	}
+
+	@Override
+	public int reciveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
+		return this.storage.receiveEnergy(maxReceive, simulate);
 	}
 }

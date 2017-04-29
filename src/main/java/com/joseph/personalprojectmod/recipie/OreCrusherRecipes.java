@@ -14,11 +14,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreCrusherRecipes {
-	private static final OreCrusherRecipes instance = new OreCrusherRecipes();
+	private static final OreCrusherRecipes INSTANCE = new OreCrusherRecipes();
 	private Map<ItemStack, ItemStack> recipeList = Maps.<ItemStack, ItemStack>newHashMap();
 	
 	public static OreCrusherRecipes instance() {
-		return instance;
+		return INSTANCE;
 	}
 	
 	private OreCrusherRecipes() {
